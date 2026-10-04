@@ -294,7 +294,7 @@ public class EntityArrow extends Entity implements IProjectile {
                             }
                         }
 
-                        world.makeSound(movingobjectposition.entity, "random.bowhit", 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+                        world.makeSound(this, "random.bowhit", 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F)); // AetherSpigot - le son vient de la flèche : caché avec son tireur
                         if (!(movingobjectposition.entity instanceof EntityEnderman)) {
                             this.die();
                         }

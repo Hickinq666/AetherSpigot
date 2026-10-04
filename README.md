@@ -1,67 +1,38 @@
 # AetherSpigot
 
-Serveur **Spigot 1.8.8** pour le practice HCF. Le jar à lancer est `bundle/AetherSpigot-1.8.8.jar` (21 Mo). Il contient Spigot, CraftBukkit, les patches AetherSpigot, le moteur practice et ViaVersion, déjà compilés.
+Serveur **Spigot 1.8.8** pour le practice HCF d'AetherNetwork. C'est un fork de [NachoSpigot](https://github.com/CobbleSword/NachoSpigot) (lui-même basé sur TacoSpigot, PaperSpigot et Spigot) : toutes les sources du serveur sont dans ce dépôt, et le practice est codé dans le serveur, pas dans un plugin.
+
+Le jar prêt à lancer est `bundle/AetherSpigot.jar` (57 Mo). Il contient tout : Minecraft 1.8.8, CraftBukkit, NachoSpigot, le practice et ViaVersion. Il ne télécharge rien et ne compile rien au démarrage.
 
 ## Lancer
 
-Pose `run.sh` et `AetherSpigot-1.8.8.jar` (ou ce jar renommé `spigot.jar`) dans le dossier du serveur, puis :
+Copie `bundle/AetherSpigot.jar` dans le dossier de ton serveur sous le nom `spigot.jar`, puis :
 
 ```bash
-sh run.sh
+java -Xms4G -Xmx4G -jar spigot.jar nogui
 ```
 
-Au tout premier lancement, `run.sh` prend le server.jar 1.8.8 officiel chez Mojang (8 Mo, vérifié par SHA-1), le patche en quelques secondes et écrit `spigot.jar`, le serveur complet (28 Mo). Ensuite il lance `spigot.jar` directement, sans rien télécharger. Rien à compiler, pas de BuildTools.
+Ou pose `run.sh` à côté de `spigot.jar` et lance `sh run.sh`. Depuis ce dépôt, `sh run.sh` fait tourner le serveur dans `server/`.
 
-Il écrit ensuite `server.properties`, `bukkit.yml` et `spigot.yml` avec le preset HCF (400 slots, view-distance 4, sans mobs) et installe dans `plugins/` le moteur practice et ViaVersion.
+Au premier démarrage, le serveur écrit `server.properties`, `bukkit.yml` et `spigot.yml` avec le preset HCF (400 slots, view-distance 4, sans mobs), les configs practice dans `aether/`, et installe ViaVersion, ViaBackwards et ViaRewind dans `plugins/`. Un ancien `plugins/AetherSpigot.jar` est renommé en `.ancien` : le practice est maintenant dans le serveur.
 
-Lis l'[EULA Minecraft](https://aka.ms/MinecraftEULA), puis écris `eula=true` dans `eula.txt`. Prends Java 17 : ViaVersion 5 ne tourne pas sur Java 8.
+Lis l'[EULA Minecraft](https://aka.ms/MinecraftEULA), puis écris `eula=true` dans `eula.txt`. Prends Java 17 ou 21 : ViaVersion 5 ne tourne pas sur Java 8. Dans un `.sh` sous Linux, `pause` n'existe pas : retire cette ligne de ton script.
 
-Sous Windows, `pause` dans un `.bat` est normal. Dans un `.sh` sous Linux, `pause` n'existe pas : retire cette ligne. Depuis ce dépôt, `sh run.sh` lance le jar dans `server/`.
+Le jar contient le code de Mojang : garde ce dépôt et le jar privés.
 
-### Pourquoi Mojang est téléchargé à part
+## Ce qu'AetherSpigot change dans NachoSpigot
 
-Le code du serveur Minecraft appartient à Mojang, qui interdit de redistribuer une version modifiée. Paper fait pareil avec son jar « paperclip » : le jar distribué contient seulement notre code et un patch binaire. Le code de Mojang vient de ses propres serveurs.
-
-### Jar complet, sans aucun téléchargement
-
-Sur ta machine, une seule fois :
-
-```bash
-java -jar AetherSpigot-1.8.8.jar --export spigot.jar
-```
-
-`spigot.jar` (28 Mo) est le serveur complet : Mojang, Spigot, CraftBukkit, les patches AetherSpigot, le moteur practice et ViaVersion. Il démarre sans réseau et ne télécharge rien. Copie-le sur tes serveurs et lance `java -Xms4G -Xmx4G -jar spigot.jar nogui`. Garde-le privé : il contient le code de Mojang.
-
-Le moteur practice (`bundle/plugins/AetherSpigot.jar`) gère les perles, le knockback, les enchantements, l'armure, les patches de combat et un menu qui écrit dans les YAML. Les clients 1.7 à 1.21 rejoignent grâce à ViaVersion, ViaBackwards et ViaRewind.
-
-## Refaire le jar
-
-```bash
-sudo apt install git curl openjdk-8-jdk-headless openjdk-17-jdk-headless
-pip install bsdiff4
-mvn package && cp target/AetherSpigot.jar bundle/plugins/
-sh scripts/build-aetherspigot.sh
-python3 scripts/make_server_jar.py
-```
-
-`build-aetherspigot.sh` lance BuildTools avec Java 8, applique `patches/server/`, embarque `bundle/plugins/` et `server-config/`, et compile `server/AetherSpigot-1.8.8.jar`. `make_server_jar.py` calcule le patch entre ce jar et celui de Mojang, puis écrit `bundle/AetherSpigot-1.8.8.jar` avec le lanceur de `launcher/`.
-
-### Ce que change le patch serveur
-
-| Patch | Effet |
+| Partie | Effet |
 | --- | --- |
-| Nom | `/version`, F3 et la liste des serveurs affichent AetherSpigot |
-| Démarrage | Configs HCF et plugins installés depuis le jar. Un plugin du même nom déjà présent sous un autre fichier est gardé |
-| Isolation | Un joueur caché avec `hidePlayer` est caché entièrement : ses flèches, perles, potions, bouchon de canne, items jetés et TNT n'apparaissent pas, ses sons et ses effets (potion qui se brise, bloc posé) ne sont pas envoyés. Ses projectiles et ses potions ne touchent pas les joueurs qui ne le voient pas, et il ne ramasse pas leurs items. Désactivable avec `-Daether.isolation=false` |
-| Réseau Java 17 | Le Netty de la 1.8.8 plante en epoll sur Java 9+ (« Unable to access address of buffer »). Le serveur passe en NIO tout seul |
+| Nom | `/version`, F3 et la liste des serveurs affichent AetherSpigot. Le blocage « NachoSpigot n'est plus maintenu » au démarrage est retiré |
+| Practice dans le serveur | `net.aether.spigot` (configs, menu, perles, combat, enchantements, `/hide`, `/see`) est compilé dans le serveur. `CraftServer` le démarre avant les plugins. Il n'apparaît pas dans `/plugins` |
+| Knockback | Calculé dans `EntityHuman.attack` (corps à corps) et `EntityLiving` (flèches), dans le tick du coup, avec le profil actif de `aether/knockback/`. `/kb` de NachoSpigot est remplacé par `/knockback` |
+| Isolation | Un joueur caché avec `hidePlayer` est caché entièrement : ses flèches, perles, potions, bouchon de canne, items jetés et TNT n'apparaissent pas, ses sons et ses effets (potion qui se brise, flèche qui touche, bloc posé) ne sont pas envoyés. Ses projectiles et ses potions ne touchent pas les joueurs qui ne le voient pas, et il ne ramasse pas leurs items. Désactivable avec `-Daether.isolation=false` |
+| Démarrage | Configs HCF et ViaVersion installés depuis le jar |
 
-Pour retélécharger ViaVersion :
+Le code AetherSpigot dans les fichiers NMS est marqué `// AetherSpigot`. Le reste vient de NachoSpigot : optimisations réseau, entity tracker, hit detection, explosions, potions compensées (voir la liste dans le [README de NachoSpigot](https://github.com/CobbleSword/NachoSpigot#patches)).
 
-```bash
-bash scripts/bundle-via.sh
-```
-
-ViaVersion, ViaBackwards et ViaRewind sont des projets GPL. Leurs sources sont sur [github.com/ViaVersion](https://github.com/ViaVersion).
+ViaVersion, ViaBackwards et ViaRewind sont des projets GPL. Leurs sources sont sur [github.com/ViaVersion](https://github.com/ViaVersion). `bash scripts/bundle-via.sh` les retélécharge.
 
 ## Menu
 
@@ -73,7 +44,7 @@ ViaVersion, ViaBackwards et ViaRewind sont des projets GPL. Leurs sources sont s
 | Droit | Tu écris la valeur dans le chat |
 | Shift | Diminue un nombre, ou retire une ligne de liste |
 
-`cancel` dans le chat annule la saisie. Le lore vert veut dire que le réglage est appliqué tout de suite. Le lore rouge est enregistré pour le jar du serveur (threads Netty, tick des chunks, redstone Eigencraft) : BuildTools ne les branche pas depuis un plugin.
+`cancel` dans le chat annule la saisie. Le lore vert veut dire que le réglage est appliqué tout de suite. Le lore rouge est enregistré mais pas encore branché dans le serveur (threads Netty, tick des chunks, redstone Eigencraft).
 
 ## Commandes
 
@@ -83,7 +54,7 @@ ViaVersion, ViaBackwards et ViaRewind sont des projets GPL. Leurs sources sont s
 | `/aether version` | Version, Java, protocole ViaVersion |
 | `/knockback` | Créer, voir, activer et éditer les profils |
 | `/ping [joueur]` | Ping |
-| `/tps` | TPS, mémoire, chunks, entités |
+| `/tps` | TPS de Spigot. `/aetherspigot:tps` donne aussi la mémoire, les chunks et les entités |
 | `/clearlag` | Items, flèches, XP |
 | `/unloadchunks` | Chunks sans joueur proche |
 | `/setmaxplayers <n>` | Slots affichés |
@@ -95,6 +66,8 @@ Les textes de ces commandes sont dans `messages.yml`. Les textes système (kick 
 Permission complète : `aether.admin` (op par défaut). `/hide` et `/see` demandent `aether.isolation`. `/ping` est ouvert à tout le monde.
 
 ## Fichiers
+
+Tout est dans le dossier `aether/` du serveur, créé au premier démarrage. Les réglages NachoSpigot restent dans `nacho.yml`, `paper.yml` et `taco.yml`.
 
 | Fichier | Contenu |
 | --- | --- |
@@ -109,7 +82,7 @@ Permission complète : `aether.admin` (op par défaut). `/hide` et `/see` demand
 | `via.yml` | Hook ViaVersion |
 | `generator/Default.yml` | Options de génération, lues par un générateur externe |
 
-Profil de knockback global au premier boot : **HCF**. `/knockback setactive Practice` ou `Combo` change le feeling.
+Profil de knockback global au premier boot : **HCF**. `/knockback setactive Practice` ou `Combo` change le feeling. Le `knockback.yml` de NachoSpigot ne sert que si `overrideKnockback` est coupé dans `aether.yml`, et pour les boules de neige, œufs et perles.
 
 Cooldown de perle : `practice.pearlCooldownSeconds` (16). Armure de teamfight : `players.armorDamageDivision` (12, plus de dégâts passent qu'avec 4). Protection sans aléatoire : `players.protRandomness: false` et `protectionModifier: 22`.
 
@@ -118,7 +91,15 @@ Cooldown de perle : `practice.pearlCooldownSeconds` (16). Armure de teamfight : 
 Java 17+ et Maven :
 
 ```bash
-mvn package
+sh scripts/build.sh
 ```
 
-Le jar est `target/AetherSpigot.jar`. Le code du plugin vise Java 8. Les tests couvrent le YAML, le knockback, les perles, l'armure et les enchantements.
+Le script compile l'API et le serveur, lance les tests du practice, puis copie le jar dans `bundle/AetherSpigot.jar`. La première fois, il installe la dépendance `minecraft-server 1.8.8` avec BuildTools (Java 8 requis) : elle n'existe sur aucun dépôt Maven public.
+
+| Dossier | Contenu |
+| --- | --- |
+| `AetherSpigot-API/` | API Bukkit de NachoSpigot |
+| `AetherSpigot-Server/src/main/java/net/minecraft/server/` | Code serveur Minecraft modifié |
+| `AetherSpigot-Server/src/main/java/net/aether/spigot/` | Practice : configs, menu, knockback, perles, combat, commandes |
+| `AetherSpigot-Server/src/main/java/org/aetherspigot/` | Démarrage, isolation, liens entre le NMS et le practice |
+| `AetherSpigot-Server/src/main/aether/` | Configs par défaut et jars ViaVersion embarqués |
