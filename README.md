@@ -1,14 +1,30 @@
 # AetherSpigot
 
-Serveur **Spigot 1.8.8** pour le practice HCF. `server/AetherSpigot-1.8.8.jar` est un vrai jar serveur (`org.bukkit.craftbukkit.Main`) : Spigot 1.8.8 compilé par BuildTools, avec les patches de `patches/server/`.
+Serveur **Spigot 1.8.8** pour le practice HCF. `AetherSpigot-1.8.8.jar` est un vrai jar serveur (`org.bukkit.craftbukkit.Main`) : Spigot 1.8.8 compilé par BuildTools, avec les patches de `patches/server/`.
 
 Au premier démarrage, il écrit `server.properties`, `bukkit.yml` et `spigot.yml` avec le preset HCF (400 slots, view-distance 4, sans mobs), puis installe dans `plugins/` le moteur practice et ViaVersion. Il embarque les deux.
 
 Le moteur practice (`bundle/plugins/AetherSpigot.jar`) gère les perles, le knockback, les enchantements, l'armure, les patches de combat et un menu qui écrit dans les YAML. Les clients 1.7 à 1.21 rejoignent grâce à ViaVersion, ViaBackwards et ViaRewind.
 
-## Construire et lancer
+## Lancer avec un seul jar
 
-Il faut `git`, `curl`, un JDK 8 pour la compilation et Java 17 pour jouer :
+`bundle/plugins/AetherSpigot.jar` (environ 160 Ko) suffit. Pose-le seul dans un dossier, appelle-le comme tu veux (`spigot.jar` marche), puis :
+
+```bash
+java -Xms4G -Xmx4G -jar spigot.jar
+```
+
+Au premier lancement, il construit le vrai serveur dans `aetherspigot-cache/` : il télécharge un Java 8 portable si la machine n'en a pas, lance BuildTools, applique `patches/server/`, télécharge ViaVersion, puis écrit `aetherspigot-cache/AetherSpigot-1.8.8.jar` (environ 28 Mo). Compte 5 à 15 minutes. Les lancements suivants démarrent le serveur tout de suite, avec la même commande et les mêmes options mémoire.
+
+Sous Linux, il faut `git` (`sudo apt install git`). Sous Windows, BuildTools télécharge Git tout seul. Le serveur tourne avec le Java qui a lancé la commande : prends Java 17 pour que ViaVersion fonctionne.
+
+Lis l'[EULA Minecraft](https://aka.ms/MinecraftEULA), puis écris `eula=true` dans `eula.txt` à côté du jar.
+
+Le jar serveur contient du code Mojang : il se construit sur ta machine et n'est jamais versionné ni partagé.
+
+Sous Windows, `pause` dans un `.bat` est normal. Dans un `.sh` sous Linux, `pause` n'existe pas : retire cette ligne.
+
+## Depuis ce dépôt
 
 ```bash
 sudo apt install git curl openjdk-8-jdk-headless openjdk-17-jre-headless
@@ -17,13 +33,7 @@ echo eula=true > server/eula.txt
 sh run.sh
 ```
 
-Lis l'[EULA Minecraft](https://aka.ms/MinecraftEULA) avant d'écrire `eula=true`.
-
-`build-aetherspigot.sh` lance BuildTools (5 à 15 minutes la première fois), applique `patches/server/`, embarque `bundle/plugins/` et `server-config/`, puis écrit `server/AetherSpigot-1.8.8.jar`. Les fois suivantes, BuildTools n'est pas relancé. Le jar contient du code Mojang : on le construit sur la machine, il n'est jamais versionné.
-
-`run.sh` lance ce jar depuis `server/` avec Java 17, G1 et 4G de mémoire (`AETHER_XMS`, `AETHER_XMX`, `AETHER_JAVA` pour changer). Sous Windows, `pause` dans un `.bat` est normal. Dans un `.sh` sous Linux, `pause` n'existe pas : retire cette ligne.
-
-Si le terminal affiche `no main manifest attribute, in spigot.jar`, le fichier lancé est le plugin, pas le serveur. Lance `server/AetherSpigot-1.8.8.jar`.
+`build-aetherspigot.sh` fait la même construction avec les jars de `bundle/plugins/` et écrit `server/AetherSpigot-1.8.8.jar`. `run.sh` le lance depuis `server/` avec Java 17, G1 et 4G (`AETHER_XMS`, `AETHER_XMX`, `AETHER_JAVA` pour changer).
 
 ### Ce que change le patch serveur
 

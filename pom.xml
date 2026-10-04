@@ -84,6 +84,16 @@
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
             </resource>
+            <resource>
+                <directory>patches/server</directory>
+                <targetPath>aether-server/patches</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>server-config</directory>
+                <targetPath>aether-server/defaults</targetPath>
+                <filtering>false</filtering>
+            </resource>
         </resources>
     </build>
 </project>
