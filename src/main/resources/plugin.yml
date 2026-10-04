@@ -31,6 +31,12 @@ commands:
   setmaxplayers:
     description: Change le nombre de slots
     usage: /setmaxplayers <nombre>
+  hide:
+    description: Cache un joueur (lui, ses projectiles, ses sons)
+    usage: /hide <joueur> [observateur]
+  see:
+    description: Montre de nouveau un joueur cache
+    usage: /see <joueur> [observateur]
 permissions:
   aether.admin:
     description: Acces complet au menu et aux commandes
@@ -43,6 +49,9 @@ permissions:
       aether.chunks: true
       aether.slots: true
       aether.ping.others: true
+      aether.isolation: true
+  aether.isolation:
+    default: op
   aether.config:
     default: op
   aether.knockback:

@@ -77,10 +77,12 @@ ViaVersion, ViaBackwards et ViaRewind sont des projets GPL. Leurs sources sont s
 | `/clearlag` | Items, flèches, XP |
 | `/unloadchunks` | Chunks sans joueur proche |
 | `/setmaxplayers <n>` | Slots affichés |
+| `/hide <joueur> [observateur]` | Tu ne vois plus ce joueur, ni ses projectiles, ni ses sons. Avec un observateur, c'est lui qui ne le voit plus |
+| `/see <joueur> [observateur]` | Annule `/hide` |
 
 Les textes de ces commandes sont dans `messages.yml`. Les textes système (kick spam, durabilité) sont dans `language.yml`.
 
-Permission complète : `aether.admin` (op par défaut). `/ping` est ouvert à tout le monde.
+Permission complète : `aether.admin` (op par défaut). `/hide` et `/see` demandent `aether.isolation`. `/ping` est ouvert à tout le monde.
 
 ## Fichiers
 

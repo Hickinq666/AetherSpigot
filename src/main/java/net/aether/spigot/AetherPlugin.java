@@ -55,7 +55,7 @@ public final class AetherPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PatchListener(this), this);
         getServer().getPluginManager().registerEvents(new EnchantListener(this), this);
         CommandBridge bridge = new CommandBridge(this);
-        String[] names = {"aether", "config", "knockback", "ping", "tps", "clearlag", "unloadchunks", "setmaxplayers"};
+        String[] names = {"aether", "config", "knockback", "ping", "tps", "clearlag", "unloadchunks", "setmaxplayers", "hide", "see"};
         for (int i = 0; i < names.length; i++) {
             PluginCommand command = getCommand(names[i]);
             if (command != null) {

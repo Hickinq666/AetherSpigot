@@ -66,6 +66,9 @@ public final class CommandBridge implements CommandExecutor, TabCompleter {
         if ("setmaxplayers".equals(name)) {
             return slots(sender, args);
         }
+        if ("hide".equals(name) || "see".equals(name)) {
+            return isolation(sender, name, args);
+        }
         return false;
     }
 
@@ -178,6 +181,45 @@ public final class CommandBridge implements CommandExecutor, TabCompleter {
         values.put("player", target.getName());
         values.put("ping", Integer.toString(NmsBridge.ping(target)));
         plugin.messages().send(sender, "command.ping-command.otherPlayerPing", values);
+        return true;
+    }
+
+    private boolean isolation(CommandSender sender, String name, String[] args) {
+        if (!allowed(sender, "aether.isolation")) {
+            return true;
+        }
+        Map<String, String> values = map();
+        values.put("command", name);
+        if (args.length == 0 || args.length > 2 || (args.length == 1 && !(sender instanceof Player))) {
+            plugin.messages().send(sender, "command.isolation-command.usage", values);
+            return true;
+        }
+        Player target = Online.byName(args[0]);
+        Player viewer = args.length == 2 ? Online.byName(args[1]) : (Player) sender;
+        if (target == null || viewer == null) {
+            values.put("player", target == null ? args[0] : args[1]);
+            plugin.messages().send(sender, "player.playerNotFound", values);
+            return true;
+        }
+        values.put("player", target.getName());
+        values.put("viewer", viewer.getName());
+        if (target.equals(viewer)) {
+            plugin.messages().send(sender, "command.isolation-command.self", values);
+            return true;
+        }
+        boolean hide = "hide".equals(name);
+        if (hide != viewer.canSee(target)) {
+            plugin.messages().send(sender, hide ? "command.isolation-command.alreadyHidden" : "command.isolation-command.alreadyShown", values);
+            return true;
+        }
+        if (hide) {
+            viewer.hidePlayer(target);
+        } else {
+            viewer.showPlayer(target);
+        }
+        boolean forSelf = viewer.equals(sender);
+        String key = hide ? (forSelf ? "hidden" : "hiddenFor") : (forSelf ? "shown" : "shownFor");
+        plugin.messages().send(sender, "command.isolation-command." + key, values);
         return true;
     }
 
@@ -721,6 +763,9 @@ public final class CommandBridge implements CommandExecutor, TabCompleter {
             if (args.length == 3 && "settype".equalsIgnoreCase(args[0])) {
                 return filter(args[2], Arrays.asList("SIMPLE", "ADVANCED"));
             }
+        }
+        if (("hide".equals(name) || "see".equals(name)) && (args.length == 1 || args.length == 2)) {
+            return playerNames(args[args.length - 1]);
         }
         if (("ping".equals(name) || "aether".equals(name) || "config".equals(name)) && args.length == 1) {
             if ("ping".equals(name)) {

@@ -15,6 +15,15 @@ command:
     setMaxPlayersUsage: "&cUsage: /setmaxplayers <nombre>"
     setMaxPlayers: "&eSlots du serveur: &d%amount%&e."
     failed: "&cImpossible de changer les slots sur ce serveur."
+  isolation-command:
+    usage: "&cUsage: /%command% <joueur> [observateur]"
+    self: "&cTu ne peux pas te cacher a toi-meme."
+    hidden: "&eTu ne vois plus &d%player%&e : ni lui, ni ses projectiles, ni ses sons."
+    shown: "&eTu vois de nouveau &d%player%&e."
+    hiddenFor: "&d%viewer% &ene voit plus &d%player%&e."
+    shownFor: "&d%viewer% &evoit de nouveau &d%player%&e."
+    alreadyHidden: "&d%viewer% &7ne voyait deja plus &d%player%&7."
+    alreadyShown: "&d%viewer% &7voyait deja &d%player%&7."
   unload-chunks-command:
     unloadedChunks: "&eChunks decharges: &d%amount%&e."
     disabled: "&cLa commande de chunks est desactivee."
