@@ -195,7 +195,7 @@ public class EntityArrow extends Entity implements IProjectile {
             for (j = 0; j < list.size(); ++j) {
                 Entity entity1 = (Entity) list.get(j);
 
-                if (entity1.ad() && (entity1 != this.shooter || this.as >= 5)) {
+                if (entity1.ad() && (entity1 != this.shooter || this.as >= 5) && !org.aetherspigot.Isolation.blocked(this, entity1)) { // AetherSpigot
                     f1 = 0.3F;
                     AxisAlignedBB axisalignedbb1 = entity1.getBoundingBox().grow((double) f1, (double) f1, (double) f1);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb1.a(vec3d, vec3d1);
@@ -277,7 +277,7 @@ public class EntityArrow extends Entity implements IProjectile {
                                 entityliving.setArrowsStuck(entityliving.getArrowsStuck() + 1); // Nacho - deobfuscate getArrowsStuck, setArrowsStuck
                             }
 
-                            if (this.knockbackStrength > 0) {
+                            if (this.knockbackStrength > 0 && !org.aetherspigot.AetherHooks.arrowHandled(movingobjectposition.entity)) { // AetherSpigot
                                 f3 = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
                                 if (f3 > 0.0F) {
                                     movingobjectposition.entity.g(this.motX * (double) this.knockbackStrength * 0.6000000238418579D / (double) f3, 0.1D, this.motZ * (double) this.knockbackStrength * 0.6000000238418579D / (double) f3);

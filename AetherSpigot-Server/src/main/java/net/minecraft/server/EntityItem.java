@@ -311,6 +311,7 @@ public class EntityItem extends Entity implements HopperPusher {
     }
 
     public void d(EntityHuman entityhuman) {
+        if (entityhuman instanceof EntityPlayer && org.aetherspigot.Isolation.hidden((EntityPlayer) entityhuman, this)) return; // AetherSpigot
         if (!this.world.isClientSide) {
             ItemStack itemstack = this.getItemStack();
             int i = itemstack.count;

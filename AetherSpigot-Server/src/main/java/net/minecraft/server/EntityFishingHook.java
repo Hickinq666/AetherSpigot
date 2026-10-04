@@ -169,7 +169,7 @@ public class EntityFishingHook extends Entity {
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity1 = (Entity) list.get(i);
 
-                if (entity1.ad() && (entity1 != this.owner || this.au >= 5)) {
+                if (entity1.ad() && (entity1 != this.owner || this.au >= 5) && !org.aetherspigot.Isolation.blocked(this, entity1)) { // AetherSpigot
                     float f = 0.3F;
                     AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow((double) f, (double) f, (double) f);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);

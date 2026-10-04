@@ -22,13 +22,6 @@ public class Main {
     public static boolean useConsole = true;
 
     public static void main(String[] args) {
-        if(System.getProperty("ignoreDeprecated") != "true") {
-            System.err.println("NachoSpigot is no longer maintained or supported");
-            System.err.println("There are many unfixed bugs that will not be fixed");
-            System.err.println("It is recommended that you use a different 1.8 fork or use newer versions with backwards-compatibility plugins");
-            System.err.println("If you know what you're doing, you can continue using NachoSpigot by setting the \"ignoreDeprecated\" JVM argument to \"true\"");
-            System.exit(1);
-        }
         System.setProperty("log4j2.formatMsgNoLookups", "true");
 
         try {
@@ -239,6 +232,7 @@ public class Main {
                     Nacho.LOGGER.warn( "Please see http://www.spigotmc.org/wiki/changing-permgen-size/ for more details and more in-depth instructions." );
                 }
                 // Spigot End
+                org.aetherspigot.AetherBoot.prepare(options); // AetherSpigot
                 Nacho.LOGGER.info("Loading libraries, please wait...");
                 net.techcable.tacospigot.TacoSpigotConfig.init((File) options.valueOf("taco-settings")); // TacoSpigot - load config before we load libraries to allow access while loading
                 MinecraftServer.main(options);

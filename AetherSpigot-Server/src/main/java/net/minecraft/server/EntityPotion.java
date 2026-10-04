@@ -93,6 +93,7 @@ public class EntityPotion extends EntityProjectile {
             HashMap<LivingEntity, Double> affected = new HashMap<>();
 
             for (EntityLiving entityliving : list1) {
+                if (org.aetherspigot.Isolation.blocked(this, entityliving)) continue; // AetherSpigot
                 double d0 = this.h(entityliving);
 
                 if (d0 < 16.0D) {

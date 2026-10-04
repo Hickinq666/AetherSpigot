@@ -19,7 +19,7 @@ public class WatchdogThread extends Thread
 
     private WatchdogThread(long timeoutTime, boolean restart)
     {
-        super( "NachoSpigot Watchdog Thread" );
+        super( "AetherSpigot Watchdog Thread" );
         this.timeoutTime = timeoutTime;
         this.restart = restart;
     }

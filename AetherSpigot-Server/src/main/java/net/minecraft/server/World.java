@@ -1165,6 +1165,8 @@ public abstract class World implements IBlockAccess {
     }
 
     public void makeSound(final Entity entity, final String s, final float f, final float f1) {
+        Entity aetherPrevious = org.aetherspigot.Isolation.push(entity); // AetherSpigot
+        try {
         for (final IWorldAccess iWorldAccess : this.u) {
             if (entity instanceof EntityHuman) {
                 iWorldAccess.a((EntityHuman) entity, s, entity.locX, entity.locY, entity.locZ, f, f1);
@@ -1172,6 +1174,7 @@ public abstract class World implements IBlockAccess {
                 iWorldAccess.a(s, entity.locX, entity.locY, entity.locZ, f, f1);
             }
         }
+        } finally { org.aetherspigot.Isolation.pop(aetherPrevious); } // AetherSpigot
     }
 
     public void a(EntityHuman entityhuman, String s, float f, float f1) {
@@ -1604,6 +1607,7 @@ public abstract class World implements IBlockAccess {
             }
             // CraftBukkit end
 
+            Entity aetherPrevious = org.aetherspigot.Isolation.push(entity); // AetherSpigot
             try {
                 ++entity.ticksLived;
                 entity.t_();
@@ -1617,6 +1621,8 @@ public abstract class World implements IBlockAccess {
                 }
 
                 throw new ReportedException(crashreport);
+            } finally {
+                org.aetherspigot.Isolation.pop(aetherPrevious); // AetherSpigot
             }
 
             if (entity.dead) {
@@ -1881,11 +1887,14 @@ public abstract class World implements IBlockAccess {
             if (flag && entity.ad) {
                 ++entity.ticksLived;
                 ++co.aikar.timings.TimingHistory.activatedEntityTicks; // Spigot
+                Entity aetherPrevious = org.aetherspigot.Isolation.push(entity); // AetherSpigot
+                try {
                 if (entity.vehicle != null) {
                     entity.ak();
                 } else {
                     entity.t_();
                 }
+                } finally { org.aetherspigot.Isolation.pop(aetherPrevious); } // AetherSpigot
             }
 
             this.methodProfiler.a("chunkCheck");

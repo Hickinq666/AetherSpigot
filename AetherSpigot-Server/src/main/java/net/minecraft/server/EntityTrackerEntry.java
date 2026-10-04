@@ -344,7 +344,7 @@ public class EntityTrackerEntry {
         org.spigotmc.AsyncCatcher.catchOp( "player tracker update"); // Spigot
         if (entityplayer != this.tracker) {
             boolean isPlayerEntityTracked = this.trackedPlayers.contains(entityplayer);
-            if (this.c(entityplayer)) {
+            if (this.c(entityplayer) && !org.aetherspigot.Isolation.hidden(entityplayer, this.tracker)) { // AetherSpigot
                 if (!isPlayerEntityTracked && (this.e(entityplayer) || this.tracker.attachedToPlayer)) {
                     // CraftBukkit start - respect vanish API
                     if (!entityplayer.getBukkitEntity().canSee(this.tracker.getBukkitEntity())) {

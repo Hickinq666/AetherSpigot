@@ -30,8 +30,7 @@ public class PaperVersionFetcher implements VersionFetcher {
     @Nonnull
     @Override
     public String getVersionMessage(@Nonnull String serverVersion) {
-        String[] parts = serverVersion.substring("git-NachoSpigot-".length()).split("[-\\s]"); // Nacho
-        return getUpdateStatusMessage("CobbleSword/NachoSpigot", GITHUB_BRANCH_NAME, parts[0]); // Nacho
+        return ChatColor.GRAY + "AetherSpigot " + serverVersion + " (fork de NachoSpigot pour AetherNetwork)"; // AetherSpigot
     }
 
     private static @Nullable

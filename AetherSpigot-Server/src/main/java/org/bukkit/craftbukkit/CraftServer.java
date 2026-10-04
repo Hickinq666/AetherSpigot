@@ -125,7 +125,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 public final class CraftServer implements Server {
     private static final Player[] EMPTY_PLAYER_ARRAY = new Player[0];
-    private String serverName = "NachoSpigot";
+    private String serverName = "AetherSpigot"; // AetherSpigot
     private final String serverVersion;
     private final String bukkitVersion = Versioning.getBukkitVersion();
     private final Logger logger = Logger.getLogger("Minecraft");
@@ -344,6 +344,10 @@ public final class CraftServer implements Server {
             helpMap.initializeGeneralTopics();
         }
 
+        if (type == PluginLoadOrder.POSTWORLD) {
+            net.aether.spigot.AetherCore.start(this); // AetherSpigot - le practice démarre avant les plugins
+        }
+
         Plugin[] plugins = pluginManager.getPlugins();
 
         for (Plugin plugin : plugins) {
@@ -369,6 +373,7 @@ public final class CraftServer implements Server {
 
     public void disablePlugins() {
         pluginManager.disablePlugins();
+        net.aether.spigot.AetherCore.stop(); // AetherSpigot
     }
 
     private void setVanillaCommands(boolean first) { // Spigot

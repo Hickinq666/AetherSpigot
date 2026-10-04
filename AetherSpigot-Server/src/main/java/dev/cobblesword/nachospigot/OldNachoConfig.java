@@ -17,7 +17,7 @@ public class OldNachoConfig {
     public boolean fireEntityExplodeEvent = true;
     public boolean reducedDensityRays = true;
     public int playerTimeStatisticsInterval = 20;
-    public String serverBrandName = "NachoSpigot";
+    public String serverBrandName = "AetherSpigot";
     public boolean stopDecodingItemStackOnPlace = true;
     public boolean enableAntiCrash = true;
     public boolean infiniteWaterSources = true;

@@ -893,6 +893,7 @@ public abstract class EntityLiving extends Entity {
     public void a(double x, double z, DamageSource source) {
         if (this.random.nextDouble() >= this.getAttributeInstance(GenericAttributes.c).getValue()) {
             this.ai = true;
+            if (org.aetherspigot.AetherHooks.projectile(this, source)) return; // AetherSpigot - knockback practice des flèches
 
             double magnitude = FastMath.sqrt(FastMath.pow(x, 2) + FastMath.pow(z, 2));
             double horizontal = 0.4D;

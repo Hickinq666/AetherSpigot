@@ -617,8 +617,19 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         this.player.playerConnection.sendPacket(new PacketPlayOutPosition(d0, d1, d2, f, f1, set));
     }
 
+    // AetherSpigot start - le joueur est la source des sons émis pendant ce paquet
     public void a(PacketPlayInBlockDig packetplayinblockdig) {
         PlayerConnectionUtils.ensureMainThread(packetplayinblockdig, this, this.player.u());
+        Entity aetherPrevious = org.aetherspigot.Isolation.push(this.player);
+        try {
+            this.aetherBlockDig(packetplayinblockdig);
+        } finally {
+            org.aetherspigot.Isolation.pop(aetherPrevious);
+        }
+    }
+
+    private void aetherBlockDig(PacketPlayInBlockDig packetplayinblockdig) {
+    // AetherSpigot end
         if (this.player.dead) return; // CraftBukkit
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         BlockPosition blockposition = packetplayinblockdig.a();
@@ -711,8 +722,19 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     private long lastPlace = -1;
     private int packets = 0;
 
+    // AetherSpigot start - le joueur est la source des sons émis pendant ce paquet
     public void a(PacketPlayInBlockPlace packetplayinblockplace) {
         PlayerConnectionUtils.ensureMainThread(packetplayinblockplace, this, this.player.u());
+        Entity aetherPrevious = org.aetherspigot.Isolation.push(this.player);
+        try {
+            this.aetherBlockPlace(packetplayinblockplace);
+        } finally {
+            org.aetherspigot.Isolation.pop(aetherPrevious);
+        }
+    }
+
+    private void aetherBlockPlace(PacketPlayInBlockPlace packetplayinblockplace) {
+    // AetherSpigot end
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         boolean throttled = false;
         // PaperSpigot - Allow disabling the player interaction limiter

@@ -1089,6 +1089,7 @@ public abstract class PlayerList {
                continue;
             }
             // CraftBukkit end
+            if (org.aetherspigot.Isolation.hiddenFromCurrent(entityplayer)) continue; // AetherSpigot
 
             if (entityplayer != entityhuman && (world != null || entityplayer.dimension == i)) { // Paper
                 double d4 = d0 - entityplayer.locX;
@@ -1109,6 +1110,7 @@ public abstract class PlayerList {
             if (entityhuman != null && !entityplayer.getBukkitEntity().canSee(entityhuman.getBukkitEntity())) {
                 continue;
             }
+            if (org.aetherspigot.Isolation.hiddenFromCurrent(entityplayer)) continue; // AetherSpigot
 
             if (entityplayer.dimension == i) {
                 double d4 = d0 - entityplayer.locX;

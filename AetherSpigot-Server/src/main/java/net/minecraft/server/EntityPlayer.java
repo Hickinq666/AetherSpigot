@@ -323,7 +323,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             // IonSpigot start - Lag Compensated Potions
             for (int i = 0; i < this.potions.size(); ++i) {
                 EntityPotion entityPotion = this.potions.get(i);
-                entityPotion.tick();
+                Entity aetherPrevious = org.aetherspigot.Isolation.push(entityPotion); // AetherSpigot
+                try {
+                    entityPotion.tick();
+                } finally {
+                    org.aetherspigot.Isolation.pop(aetherPrevious); // AetherSpigot
+                }
             
                 // Check if size is > 9, this should cover some abuse
                 if (entityPotion.dead || this.potions.size() > 9) {

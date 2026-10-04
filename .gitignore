@@ -7,8 +7,7 @@ agent-tools/
 .settings/
 *.log
 .DS_Store
+dependency-reduced-pom.xml
 
-# Serveur BuildTools : jar Mojang/Spigot, mondes, logs. On ne les versionne pas.
+# Dossier de test local du serveur (mondes, logs, configs générées).
 /server/
-BuildTools.jar
-BuildTools.log.txt

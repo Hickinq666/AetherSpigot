@@ -976,6 +976,8 @@ public abstract class EntityHuman extends EntityLiving {
                 }
 
                 int i = EnchantmentManager.a((EntityLiving) this);
+                int aetherKnockbackLevel = i; // AetherSpigot
+                boolean aetherSprinting = this.isExtraKnockback(); // AetherSpigot
 
                 if (this.isExtraKnockback()) {
                     ++i;
@@ -1010,7 +1012,8 @@ public abstract class EntityHuman extends EntityLiving {
                     boolean flag2 = entity.damageEntity(DamageSource.playerAttack(this), f);
 
                     if (flag2) {
-                        if (i > 0) {
+                        if (org.aetherspigot.AetherHooks.melee(this, entity, d0, d1, d2, aetherSprinting, aetherKnockbackLevel)) { // AetherSpigot - knockback practice
+                        } else if (i > 0) {
                             KnockbackProfile profile = (entity.getKnockbackProfile() == null) ?
                                     KnockbackConfig.getCurrentKb() : entity.getKnockbackProfile();
                             entity.g(
