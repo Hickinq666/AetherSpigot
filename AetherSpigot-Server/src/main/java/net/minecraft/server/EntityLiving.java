@@ -974,7 +974,8 @@ public abstract class EntityLiving extends Entity {
 
         if (i > 0) {
             // CraftBukkit start
-            if (!this.damageEntity(DamageSource.FALL, org.aetherspigot.AetherHooks.fallDamage((float) i))) { // AetherSpigot - fallDamageMultiplier
+            float aetherFall = org.aetherspigot.PatchHooks.fallDamage(this, (float) i); // AetherSpigot
+            if (aetherFall <= 0.0F || !this.damageEntity(DamageSource.FALL, aetherFall)) {
                 return;
             }
             // CraftBukkit end

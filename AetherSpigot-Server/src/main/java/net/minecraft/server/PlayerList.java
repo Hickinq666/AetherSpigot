@@ -466,6 +466,12 @@ public abstract class PlayerList {
             }
         }
 
+        // AetherSpigot start
+        String aetherKick = event.getResult() == PlayerLoginEvent.Result.ALLOWED ? org.aetherspigot.PatchHooks.loginKick(player) : null;
+        if (aetherKick != null) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, aetherKick);
+        }
+        // AetherSpigot end
         cserver.getPluginManager().callEvent(event);
         if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
             loginlistener.disconnect(event.getKickMessage());

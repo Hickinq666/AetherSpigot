@@ -43,7 +43,9 @@ public class FoodMetaData {
         this.e = this.foodLevel;
         if (this.exhaustionLevel > 4.0F) {
             this.exhaustionLevel -= 4.0F;
-            if (this.saturationLevel > 0.0F) {
+            if (org.aetherspigot.PatchHooks.hungerLocked(entityhuman)) {
+                // AetherSpigot - faim bloquée
+            } else if (this.saturationLevel > 0.0F) {
                 this.saturationLevel = Math.max(this.saturationLevel - 1.0F, 0.0F);
             } else if (enumdifficulty != EnumDifficulty.PEACEFUL) {
                 // CraftBukkit start
@@ -62,7 +64,7 @@ public class FoodMetaData {
             ++this.foodTickTimer;
             if (this.foodTickTimer >= 80) {
                 // CraftBukkit - added RegainReason
-                entityhuman.heal(1.0F, org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason.SATIATED);
+                entityhuman.heal(org.aetherspigot.PatchHooks.naturalRegen(entityhuman, 1.0F), org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason.SATIATED); // AetherSpigot
                 this.a(entityhuman.world.spigotConfig.regenExhaustion); // Spigot - Change to use configurable value
                 this.foodTickTimer = 0;
             }

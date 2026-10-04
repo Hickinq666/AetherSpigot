@@ -4,7 +4,7 @@ import net.aether.spigot.AetherCore;
 import net.aether.spigot.config.YamlDoc;
 import net.aether.spigot.knockback.KnockbackProfile;
 import net.aether.spigot.message.Texts;
-import net.aether.spigot.patch.PatchListener;
+import net.aether.spigot.patch.PatchService;
 import net.aether.spigot.runtime.NmsBridge;
 import net.aether.spigot.runtime.Online;
 import net.aether.spigot.text.Colors;
@@ -270,7 +270,7 @@ public final class CommandBridge implements CommandExecutor, TabCompleter {
         if (!allowed(sender, "aether.clearlag")) {
             return true;
         }
-        int removed = PatchListener.clear(plugin.engine());
+        int removed = PatchService.clear(plugin.engine());
         Map<String, String> values = map();
         values.put("entities", Integer.toString(removed));
         plugin.messages().send(sender, "command.clear-lag-command.clearedLag", values);
@@ -285,7 +285,7 @@ public final class CommandBridge implements CommandExecutor, TabCompleter {
         if (!allowed(sender, "aether.chunks")) {
             return true;
         }
-        int amount = PatchListener.unloadChunks();
+        int amount = PatchService.unloadChunks();
         Map<String, String> values = map();
         values.put("amount", Integer.toString(amount));
         plugin.messages().send(sender, "command.unload-chunks-command.unloadedChunks", values);

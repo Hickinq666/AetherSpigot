@@ -1245,6 +1245,12 @@ public abstract class World implements IBlockAccess {
                     return false;
                 }
             }
+            // AetherSpigot start
+            if (org.aetherspigot.PatchHooks.spawnBlocked((EntityLiving) entity, spawnReason)) {
+                entity.dead = true;
+                return false;
+            }
+            // AetherSpigot end
 
             event = CraftEventFactory.callCreatureSpawnEvent((EntityLiving) entity, spawnReason);
         } else if (entity instanceof EntityItem) {

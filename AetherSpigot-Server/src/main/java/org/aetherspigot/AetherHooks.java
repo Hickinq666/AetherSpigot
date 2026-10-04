@@ -57,6 +57,9 @@ public final class AetherHooks {
         if (service == null || !(victim instanceof EntityPlayer)) {
             return true;
         }
+        if (source.getEntity() instanceof net.minecraft.server.IMonster && !AetherCore.get().engine().mobAi) {
+            return false;
+        }
         Player from;
         KnockbackService.Kind kind;
         EntityPlayer attacker = meleeAttacker(source);

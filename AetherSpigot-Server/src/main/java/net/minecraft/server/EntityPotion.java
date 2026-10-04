@@ -27,6 +27,7 @@ public class EntityPotion extends EntityProjectile {
     public EntityPotion(World world, EntityLiving entityliving, ItemStack itemstack) {
         super(world, entityliving);
         this.item = itemstack;
+        org.aetherspigot.PatchHooks.aimPotion(this, entityliving); // AetherSpigot
         // IonSpigot start - Lag Compensated Potions
         if (entityliving instanceof EntityPlayer && NachoConfig.lagCompensatedPotions) {
             ((EntityPlayer) entityliving).potions.add(this);

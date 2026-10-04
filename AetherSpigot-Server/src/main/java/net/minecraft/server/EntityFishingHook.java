@@ -62,7 +62,7 @@ public class EntityFishingHook extends Entity {
         this.motX = (double) (-MathHelper.sin(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
         this.motZ = (double) (MathHelper.cos(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
         this.motY = (double) (-MathHelper.sin(this.pitch / 180.0F * 3.1415927F) * f);
-        this.c(this.motX, this.motY, this.motZ, 1.5F, 1.0F);
+        this.c(this.motX, this.motY, this.motZ, 1.5F, org.aetherspigot.PatchHooks.inaccuracy(this, entityhuman, 1.0F)); // AetherSpigot
     }
 
     protected void h() {}

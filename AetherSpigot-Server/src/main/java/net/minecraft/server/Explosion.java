@@ -33,6 +33,7 @@ public class Explosion {
     public final Entity source;
     private final float size;
     private final List<BlockPosition> blocks = Lists.newArrayList();
+    private it.unimi.dsi.fastutil.longs.LongSet aetherDurable; // AetherSpigot
     private final Map<EntityHuman, Vec3D> k = Maps.newHashMap();
     public boolean wasCanceled = false; // CraftBukkit - add field
 
@@ -65,7 +66,16 @@ public class Explosion {
 
         if (!this.world.tacoSpigotConfig.optimizeLiquidExplosions || !b.getMaterial().isLiquid()) { // TacoSpigot - skip calculating what blocks to blow up in water/lava
             it.unimi.dsi.fastutil.longs.LongSet set = new it.unimi.dsi.fastutil.longs.LongOpenHashSet();
+            // AetherSpigot start - durabilité des blocs comptée pendant la recherche
+            this.aetherDurable = org.aetherspigot.PatchHooks.tracksDurability(this.source) ? new it.unimi.dsi.fastutil.longs.LongOpenHashSet() : null;
             searchForBlocks(set, chunk);
+            if (this.aetherDurable != null) {
+                org.aetherspigot.PatchHooks.applyDurability(this.world, this.source, this.aetherDurable, set);
+                this.aetherDurable = null;
+            } else {
+                org.aetherspigot.PatchHooks.protectDurable(this.world, set);
+            }
+            // AetherSpigot end
             for (it.unimi.dsi.fastutil.longs.LongIterator iterator = set.iterator(); iterator.hasNext(); ) {
                 this.blocks.add(BlockPosition.fromLong(iterator.nextLong()));
             }
@@ -358,6 +368,9 @@ public class Explosion {
                     Block block = iblockdata.getBlock();
 
                     if (block != Blocks.AIR) {
+                        if (this.aetherDurable != null && f > 0.0F && position.getY() >= 0 && position.getY() < 256 && org.aetherspigot.PatchHooks.durable(block)) {
+                            this.aetherDurable.add(position.asLong()); // AetherSpigot
+                        }
                         float blockResistance = block.durability / 5.0f;
                         resistance = (blockResistance + 0.3F) * 0.3F;
                         f -= resistance;

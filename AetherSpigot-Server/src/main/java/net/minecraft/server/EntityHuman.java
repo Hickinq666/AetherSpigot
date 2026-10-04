@@ -383,7 +383,7 @@ public abstract class EntityHuman extends EntityLiving {
         if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL && this.world.getGameRules().getBoolean("naturalRegeneration")) {
             if (this.getHealth() < this.getMaxHealth() && this.ticksLived % 20 == 0) {
                 // CraftBukkit - added regain reason of "REGEN" for filtering purposes.
-                this.heal(1.0F, org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason.REGEN);
+                this.heal(org.aetherspigot.PatchHooks.naturalRegen(this, 1.0F), org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason.REGEN); // AetherSpigot
             }
 
             if (this.foodData.c() && this.ticksLived % 10 == 0) {
@@ -1128,6 +1128,9 @@ public abstract class EntityHuman extends EntityLiving {
 
     public EntityHuman.EnumBedResult a(BlockPosition blockposition) {
         if (!this.world.isClientSide) {
+            if (org.aetherspigot.PatchHooks.sleepBlocked(this)) {
+                return EntityHuman.EnumBedResult.OTHER_PROBLEM; // AetherSpigot
+            }
             if (this.isSleeping() || !this.isAlive()) {
                 return EntityHuman.EnumBedResult.OTHER_PROBLEM;
             }

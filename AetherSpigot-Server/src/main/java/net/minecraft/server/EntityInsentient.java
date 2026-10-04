@@ -118,6 +118,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public void setGoalTarget(EntityLiving entityliving, EntityTargetEvent.TargetReason reason, boolean fireEvent) {
+        if (entityliving != null && org.aetherspigot.PatchHooks.targetBlocked(this)) entityliving = null; // AetherSpigot
         if (getGoalTarget() == entityliving) return;
         if (fireEvent) {
             if (reason == EntityTargetEvent.TargetReason.UNKNOWN && getGoalTarget() != null && entityliving == null) {

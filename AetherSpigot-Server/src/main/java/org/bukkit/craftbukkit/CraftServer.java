@@ -1008,6 +1008,7 @@ public final class CraftServer implements Server {
                 }
             }
         }
+        org.aetherspigot.PatchHooks.worldLoaded(); // AetherSpigot
         pluginManager.callEvent(new WorldLoadEvent(internal.getWorld()));
         return internal.getWorld();
     }

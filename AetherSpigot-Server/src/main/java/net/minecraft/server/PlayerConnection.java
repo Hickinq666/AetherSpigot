@@ -296,6 +296,13 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
                 if ((delta > 1f / 256 || deltaAngle > 10f) && (this.checkMovement && !this.player.dead))
                 {
+                    // AetherSpigot start - anti-phase avant que le déplacement soit appliqué
+                    if (packetplayinflying.hasPos && org.aetherspigot.PatchHooks.phaseBlocked(this.player, to.getX(), to.getY(), to.getZ())) {
+                        Nacho.get().getLagCompensator().registerMovement(player, from);
+                        this.player.playerConnection.sendPacket(new PacketPlayOutPosition(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), Collections.<PacketPlayOutPosition.EnumPlayerTeleportFlags>emptySet()));
+                        return;
+                    }
+                    // AetherSpigot end
                     this.lastPosX = to.getX();
                     this.lastPosY = to.getY();
                     this.lastPosZ = to.getZ();
@@ -654,6 +661,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     }
                 }
                 // CraftBukkit end
+                if (org.aetherspigot.PatchHooks.dropBlocked(this.player)) return; // AetherSpigot
                 this.player.a(false);
             }
 
@@ -661,6 +669,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
         case 2: // DROP_ALL_ITEMS
             if (!this.player.isSpectator()) {
+                if (org.aetherspigot.PatchHooks.dropBlocked(this.player)) return; // AetherSpigot
                 this.player.a(true);
             }
 
@@ -860,9 +869,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 return;
             }
 
-            // AetherSpigot start - la perle part au lieu d'utiliser la barrière
-            if (!throttled && org.aetherspigot.AetherHooks.pearlForcesLaunch(itemstack, worldserver.getType(blockposition).getBlock())) {
-                this.player.playerInteractManager.useItem(this.player, worldserver, itemstack);
+            // AetherSpigot start - perle ou potion lancée sur clic de bloc, outil de durabilité
+            if (!throttled && org.aetherspigot.PatchHooks.clickBlock(this.player, worldserver, blockposition, itemstack)) {
                 always = true;
             } else
             // AetherSpigot end
@@ -1120,6 +1128,25 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 }
             }
 
+            // AetherSpigot start - limite de messages par seconde
+            if (!isSync) {
+                int aetherChat = org.aetherspigot.PatchHooks.chat(this.player);
+                if (aetherChat == net.aether.spigot.patch.PatchService.CHAT_KICK) {
+                    final String aetherKick = org.aetherspigot.PatchHooks.spamKickMessage();
+                    this.minecraftServer.processQueue.add(new Waitable() {
+                        @Override
+                        protected Object evaluate() {
+                            PlayerConnection.this.disconnect(aetherKick);
+                            return null;
+                        }
+                    });
+                    return;
+                }
+                if (aetherChat == net.aether.spigot.patch.PatchService.CHAT_REFUSE) {
+                    return;
+                }
+            }
+            // AetherSpigot end
             // CraftBukkit start
             if (isSync) {
                 try {

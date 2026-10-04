@@ -41,7 +41,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.motX = (double) (-MathHelper.sin(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
         this.motZ = (double) (MathHelper.cos(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
         this.motY = (double) (-MathHelper.sin((this.pitch + this.l()) / 180.0F * 3.1415927F) * f);
-        this.shoot(this.motX, this.motY, this.motZ, this.j(), 1.0F);
+        this.shoot(this.motX, this.motY, this.motZ, this.j(), org.aetherspigot.PatchHooks.inaccuracy(this, entityliving, 1.0F)); // AetherSpigot
     }
 
     public EntityProjectile(World world, double d0, double d1, double d2) {

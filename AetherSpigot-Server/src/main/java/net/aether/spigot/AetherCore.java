@@ -10,7 +10,7 @@ import net.aether.spigot.knockback.KnockbackProfile;
 import net.aether.spigot.menu.MenuListener;
 import net.aether.spigot.menu.MenuService;
 import net.aether.spigot.message.MessageService;
-import net.aether.spigot.patch.PatchListener;
+import net.aether.spigot.patch.PatchService;
 import net.aether.spigot.pearl.PearlService;
 import net.aether.spigot.runtime.SupportMatrix;
 import net.aether.spigot.runtime.TpsCounter;
@@ -74,6 +74,7 @@ public final class AetherCore extends PluginBase {
     private KnockbackService knockback;
     private net.aether.spigot.combat.CombatService combat;
     private PearlService pearls;
+    private PatchService patches;
     private final Map<UUID, String> playerKnockback = new ConcurrentHashMap<UUID, String>();
     private final Map<UUID, EditSession> edits = new ConcurrentHashMap<UUID, EditSession>();
     private final long startedAt = System.currentTimeMillis();
@@ -128,9 +129,9 @@ public final class AetherCore extends PluginBase {
         knockback = new KnockbackService(this);
         combat = new net.aether.spigot.combat.CombatService(this);
         pearls = new PearlService(this);
+        patches = new PatchService(this);
         loadPlayerProfiles();
         server.getPluginManager().registerEvents(new MenuListener(this), this);
-        server.getPluginManager().registerEvents(new PatchListener(this), this);
         registerCommands(new CommandBridge(this));
         server.getScheduler().runTaskTimer(this, tps, 1L, 1L);
         applyWorlds();
@@ -205,6 +206,10 @@ public final class AetherCore extends PluginBase {
 
     public net.aether.spigot.combat.CombatService combat() {
         return combat;
+    }
+
+    public PatchService patches() {
+        return patches;
     }
 
     public PearlService pearls() {

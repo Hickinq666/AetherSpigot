@@ -101,7 +101,7 @@ public class EntityArrow extends Entity implements IProjectile {
         this.motX = (double) (-MathHelper.sin(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F));
         this.motZ = (double) (MathHelper.cos(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F));
         this.motY = (double) (-MathHelper.sin(this.pitch / 180.0F * 3.1415927F));
-        this.shoot(this.motX, this.motY, this.motZ, f * 1.5F, 1.0F);
+        this.shoot(this.motX, this.motY, this.motZ, f * 1.5F, org.aetherspigot.PatchHooks.inaccuracy(this, entityliving, 1.0F)); // AetherSpigot
     }
 
     protected void h() {

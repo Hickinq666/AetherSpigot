@@ -511,6 +511,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.b(StatisticList.y);
         this.a(StatisticList.h);
         this.bs().g();
+        org.aetherspigot.PatchHooks.playerDied(this); // AetherSpigot
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
