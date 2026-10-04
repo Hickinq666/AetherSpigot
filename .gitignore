@@ -9,6 +9,6 @@ agent-tools/
 .DS_Store
 
 # Serveur BuildTools : jar Mojang/Spigot, mondes, logs. On ne les versionne pas.
-server/
+/server/
 BuildTools.jar
 BuildTools.log.txt

@@ -1,34 +1,37 @@
 # AetherSpigot
 
-Moteur de practice HCF pour **Spigot 1.8.8**. Il charge les perles, le knockback, les enchantements, les dégâts d'armure, les patches de combat et un menu qui écrit dans les YAML.
+Serveur **Spigot 1.8.8** pour le practice HCF. `server/AetherSpigot-1.8.8.jar` est un vrai jar serveur (`org.bukkit.craftbukkit.Main`) : Spigot 1.8.8 compilé par BuildTools, avec les patches de `patches/server/`.
 
-Les clients 1.7 à 1.21 rejoignent le serveur 1.8.8 grâce aux jars ViaVersion déjà placés dans `bundle/plugins/`.
+Au premier démarrage, il écrit `server.properties`, `bukkit.yml` et `spigot.yml` avec le preset HCF (400 slots, view-distance 4, sans mobs), puis installe dans `plugins/` le moteur practice et ViaVersion. Il embarque les deux.
 
-## Lancer le practice
+Le moteur practice (`bundle/plugins/AetherSpigot.jar`) gère les perles, le knockback, les enchantements, l'armure, les patches de combat et un menu qui écrit dans les YAML. Les clients 1.7 à 1.21 rejoignent grâce à ViaVersion, ViaBackwards et ViaRewind.
 
-`AetherSpigot.jar` est le plugin. Le serveur est un autre fichier, `spigot-1.8.8.jar`, construit avec BuildTools.
+## Construire et lancer
 
-Si le terminal affiche :
-
-```text
-no main manifest attribute, in spigot.jar
-run.sh: 2: pause: not found
-```
-
-la première ligne veut dire que `java -jar` a ouvert le plugin (souvent renommé `spigot.jar`). La deuxième vient de `pause`, une commande de l'invite Windows : sous Linux elle n'existe pas. Le `run.sh` de ce dépôt ne l'appelle pas.
+Il faut `git`, `curl`, un JDK 8 pour la compilation et Java 17 pour jouer :
 
 ```bash
-sh scripts/build-spigot.sh
+sudo apt install git curl openjdk-8-jdk-headless openjdk-17-jre-headless
+sh scripts/build-aetherspigot.sh
+echo eula=true > server/eula.txt
 sh run.sh
 ```
 
-`scripts/build-spigot.sh` télécharge BuildTools et produit `server/spigot-1.8.8.jar`. La compilation de Spigot 1.8.8 passe avec Java 8 ou Java 17. Java 21 casse souvent les vieux plugins Maven de BuildTools. ViaVersion 5.11.0, lui, a besoin de Java 17 ou plus pour tourner : compile avec 17 si tu peux, joue avec 17.
+Lis l'[EULA Minecraft](https://aka.ms/MinecraftEULA) avant d'écrire `eula=true`.
 
-`sh run.sh` copie `server-config/` et `bundle/plugins/` dans `server/`, puis lance le jar dont le manifeste contient `org.bukkit.craftbukkit.Main`. Mémoire par défaut : 4G (`AETHER_XMS` et `AETHER_XMX` pour changer). Au premier arrêt, lis `server/eula.txt` et passe `eula=true`.
+`build-aetherspigot.sh` lance BuildTools (5 à 15 minutes la première fois), applique `patches/server/`, embarque `bundle/plugins/` et `server-config/`, puis écrit `server/AetherSpigot-1.8.8.jar`. Les fois suivantes, BuildTools n'est pas relancé. Le jar contient du code Mojang : on le construit sur la machine, il n'est jamais versionné.
 
-Le plugin écrit ses YAML dans `server/plugins/AetherSpigot/` au premier démarrage.
+`run.sh` lance ce jar depuis `server/` avec Java 17, G1 et 4G de mémoire (`AETHER_XMS`, `AETHER_XMX`, `AETHER_JAVA` pour changer). Sous Windows, `pause` dans un `.bat` est normal. Dans un `.sh` sous Linux, `pause` n'existe pas : retire cette ligne.
 
-À la main, sans le script : construis un Spigot 1.8.8 avec [BuildTools](https://www.spigotmc.org/wiki/buildtools/), copie `server-config/server.properties`, `bukkit.yml` et `spigot.yml` à la racine du serveur, copie le contenu de `bundle/plugins/` dans `plugins/`, puis `java -Xms4G -Xmx4G -jar spigot-1.8.8.jar nogui`.
+Si le terminal affiche `no main manifest attribute, in spigot.jar`, le fichier lancé est le plugin, pas le serveur. Lance `server/AetherSpigot-1.8.8.jar`.
+
+### Ce que change le patch serveur
+
+| Patch | Effet |
+| --- | --- |
+| Nom | `/version`, F3 et la liste des serveurs affichent AetherSpigot |
+| Démarrage | Configs HCF et plugins installés depuis le jar. Un plugin du même nom déjà présent sous un autre fichier est gardé |
+| Réseau Java 17 | Le Netty de la 1.8.8 plante en epoll sur Java 9+ (« Unable to access address of buffer »). Le serveur passe en NIO tout seul |
 
 Pour retélécharger ViaVersion :
 
