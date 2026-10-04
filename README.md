@@ -22,6 +22,16 @@ Sous Windows, `pause` dans un `.bat` est normal. Dans un `.sh` sous Linux, `paus
 
 Le code du serveur Minecraft appartient à Mojang, qui interdit de redistribuer une version modifiée. Paper fait pareil avec son jar « paperclip » : le jar distribué contient seulement notre code et un patch binaire. Le code de Mojang vient de ses propres serveurs.
 
+### Jar complet, sans aucun téléchargement
+
+Sur ta machine, une seule fois :
+
+```bash
+java -jar AetherSpigot-1.8.8.jar --export spigot.jar
+```
+
+`spigot.jar` (28 Mo) est le serveur complet : Mojang, Spigot, CraftBukkit, les patches AetherSpigot, le moteur practice et ViaVersion. Il démarre sans réseau et ne télécharge rien. Copie-le sur tes serveurs et lance `java -Xms4G -Xmx4G -jar spigot.jar nogui`. Garde-le privé : il contient le code de Mojang.
+
 Le moteur practice (`bundle/plugins/AetherSpigot.jar`) gère les perles, le knockback, les enchantements, l'armure, les patches de combat et un menu qui écrit dans les YAML. Les clients 1.7 à 1.21 rejoignent grâce à ViaVersion, ViaBackwards et ViaRewind.
 
 ## Refaire le jar
