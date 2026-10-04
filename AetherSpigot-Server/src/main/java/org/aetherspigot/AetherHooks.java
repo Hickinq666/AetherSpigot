@@ -50,7 +50,7 @@ public final class AetherHooks {
 
     /**
      * Début de EntityLiving.damageEntity, avant les événements et les dégâts. Règle l'invulnérabilité
-     * du profil et retourne false si le coup arrive pendant le hit delay.
+     * du profil et retourne false pour un double hit pendant cette invulnérabilité.
      */
     public static boolean hitAllowed(EntityLiving victim, DamageSource source) {
         KnockbackService service = knockback();
@@ -72,12 +72,9 @@ public final class AetherHooks {
         } else {
             return true;
         }
-        int ticks = service.hitDelay(from, ((EntityPlayer) victim).getBukkitEntity(), kind);
-        if (ticks < 0) {
-            return false;
-        }
+        int ticks = service.hitDelay(from, kind);
         victim.maxNoDamageTicks = ticks;
-        return true;
+        return !(service.blocksDoubleHit(kind) && (float) victim.noDamageTicks > (float) ticks / 2.0F);
     }
 
     /**

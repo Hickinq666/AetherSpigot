@@ -18,8 +18,6 @@ public final class KnockbackService {
     public enum Kind { MELEE, ARROW, ROD }
 
     private final AetherCore plugin;
-    private final Map<UUID, Long> lastMelee = new ConcurrentHashMap<UUID, Long>();
-    private final Map<UUID, Long> lastArrow = new ConcurrentHashMap<UUID, Long>();
     private final Map<UUID, Integer> combos = new ConcurrentHashMap<UUID, Integer>();
     private final Map<UUID, Long> comboAt = new ConcurrentHashMap<UUID, Long>();
 
@@ -37,22 +35,21 @@ public final class KnockbackService {
     }
 
     /**
-     * Appelé au début de EntityLiving.damageEntity. Retourne le nombre de ticks d'invulnérabilité
-     * à appliquer, ou -1 si le coup arrive trop tôt et doit être refusé avant tout calcul de dégâts.
+     * Invulnérabilité posée sur la victime (maxNoDamageTicks), comme en vanilla : un coup passe
+     * quand il reste moins de la moitié de ce délai.
      */
-    public int hitDelay(Player source, Player victim, Kind kind) {
-        Engine engine = plugin.engine();
+    public int hitDelay(Player source, Kind kind) {
         KnockbackProfile profile = plugin.profileFor(source);
-        long now = System.currentTimeMillis();
-        boolean arrow = kind == Kind.ARROW;
-        int delay = arrow ? profile.hitDelayArrow : profile.hitDelay;
-        boolean patched = arrow ? engine.patchArrowBounce : engine.patchDoubleHit;
-        Map<UUID, Long> stamps = arrow ? lastArrow : lastMelee;
-        if (patched && tooSoon(stamps, victim.getUniqueId(), now, delay)) {
-            return -1;
-        }
-        stamps.put(victim.getUniqueId(), Long.valueOf(now));
-        return Math.min(Math.max(0, profile.hitDelay), Math.max(0, profile.hitDelayArrow));
+        return Math.max(0, kind == Kind.ARROW ? profile.hitDelayArrow : profile.hitDelay);
+    }
+
+    /**
+     * Pendant l'invulnérabilité, vanilla laisse passer un coup plus fort que le précédent (double hit).
+     * Avec le patch, ce coup est refusé.
+     */
+    public boolean blocksDoubleHit(Kind kind) {
+        Engine engine = plugin.engine();
+        return kind == Kind.ARROW ? engine.patchArrowBounce : engine.patchDoubleHit;
     }
 
     public KnockbackMath.Vec melee(Player attacker, Player victim, double motX, double motY, double motZ,
@@ -102,14 +99,6 @@ public final class KnockbackService {
         combos.put(id, Integer.valueOf(count + 1));
         comboAt.put(id, Long.valueOf(now));
         return count;
-    }
-
-    private static boolean tooSoon(Map<UUID, Long> stamps, UUID id, long now, int delayTicks) {
-        if (delayTicks <= 0) {
-            return false;
-        }
-        Long last = stamps.get(id);
-        return last != null && now - last.longValue() < delayTicks * 50L;
     }
 
     static boolean behind(Player attacker, Player victim) {
