@@ -6,7 +6,7 @@ import net.aether.spigot.config.ConfigStore;
 import net.aether.spigot.config.Engine;
 import net.aether.spigot.config.YamlDoc;
 import net.aether.spigot.enchant.EnchantListener;
-import net.aether.spigot.knockback.KnockbackListener;
+import net.aether.spigot.knockback.KnockbackService;
 import net.aether.spigot.knockback.KnockbackProfile;
 import net.aether.spigot.menu.MenuListener;
 import net.aether.spigot.menu.MenuService;
@@ -72,7 +72,8 @@ public final class AetherCore extends PluginBase {
     private final TpsCounter tps = new TpsCounter();
     private ViaHook via;
     private MenuService menus;
-    private KnockbackListener knockback;
+    private KnockbackService knockback;
+    private net.aether.spigot.combat.CombatService combat;
     private final Map<UUID, String> playerKnockback = new ConcurrentHashMap<UUID, String>();
     private final Map<UUID, EditSession> edits = new ConcurrentHashMap<UUID, EditSession>();
     private final long startedAt = System.currentTimeMillis();
@@ -124,12 +125,11 @@ public final class AetherCore extends PluginBase {
         messages = new MessageService(store);
         via = new ViaHook();
         menus = new MenuService(this);
-        knockback = new KnockbackListener(this);
+        knockback = new KnockbackService(this);
+        combat = new net.aether.spigot.combat.CombatService(this);
         loadPlayerProfiles();
         server.getPluginManager().registerEvents(new MenuListener(this), this);
-        server.getPluginManager().registerEvents(knockback, this);
         server.getPluginManager().registerEvents(new PearlListener(this), this);
-        server.getPluginManager().registerEvents(new net.aether.spigot.combat.CombatListener(this), this);
         server.getPluginManager().registerEvents(new PatchListener(this), this);
         server.getPluginManager().registerEvents(new EnchantListener(this), this);
         registerCommands(new CommandBridge(this));
@@ -204,7 +204,11 @@ public final class AetherCore extends PluginBase {
         }
     }
 
-    public KnockbackListener knockback() {
+    public net.aether.spigot.combat.CombatService combat() {
+        return combat;
+    }
+
+    public KnockbackService knockback() {
         return knockback;
     }
 

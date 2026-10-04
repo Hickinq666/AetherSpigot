@@ -987,7 +987,7 @@ public abstract class EntityHuman extends EntityLiving {
                     boolean flag = !world.paperSpigotConfig.disablePlayerCrits && this.fallDistance > 0.0F && !this.onGround && !this.k_() && !this.V() && !this.hasEffect(MobEffectList.BLINDNESS) && this.vehicle == null && entity instanceof EntityLiving; // PaperSpigot
 
                     if (flag && f > 0.0F) {
-                        f *= 1.5F;
+                        f *= org.aetherspigot.AetherHooks.critMultiplier(); // AetherSpigot - critModifier
                     }
 
                     f += f1;
@@ -1012,7 +1012,7 @@ public abstract class EntityHuman extends EntityLiving {
                     boolean flag2 = entity.damageEntity(DamageSource.playerAttack(this), f);
 
                     if (flag2) {
-                        if (org.aetherspigot.AetherHooks.melee(this, entity, d0, d1, d2, aetherSprinting, aetherKnockbackLevel)) { // AetherSpigot - knockback practice
+                        if (org.aetherspigot.AetherHooks.meleeHandled(this, entity, aetherSprinting, aetherKnockbackLevel)) { // AetherSpigot - knockback posé par EntityLiving.a
                         } else if (i > 0) {
                             KnockbackProfile profile = (entity.getKnockbackProfile() == null) ?
                                     KnockbackConfig.getCurrentKb() : entity.getKnockbackProfile();

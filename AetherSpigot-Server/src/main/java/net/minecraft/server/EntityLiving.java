@@ -718,6 +718,7 @@ public abstract class EntityLiving extends Entity {
                     f *= 0.75F;
                 }
 
+                if (!org.aetherspigot.AetherHooks.hitAllowed(this, damagesource)) return false; // AetherSpigot - hit delay du profil, avant les dégâts
                 this.aB = 1.5F;
                 boolean flag = true;
 
@@ -893,7 +894,7 @@ public abstract class EntityLiving extends Entity {
     public void a(double x, double z, DamageSource source) {
         if (this.random.nextDouble() >= this.getAttributeInstance(GenericAttributes.c).getValue()) {
             this.ai = true;
-            if (org.aetherspigot.AetherHooks.projectile(this, source)) return; // AetherSpigot - knockback practice des flèches
+            if (org.aetherspigot.AetherHooks.knockback(this, source)) return; // AetherSpigot - knockback practice à la place de la formule NachoSpigot
 
             double magnitude = FastMath.sqrt(FastMath.pow(x, 2) + FastMath.pow(z, 2));
             double horizontal = 0.4D;
@@ -973,7 +974,7 @@ public abstract class EntityLiving extends Entity {
 
         if (i > 0) {
             // CraftBukkit start
-            if (!this.damageEntity(DamageSource.FALL, (float) i)) {
+            if (!this.damageEntity(DamageSource.FALL, org.aetherspigot.AetherHooks.fallDamage((float) i))) { // AetherSpigot - fallDamageMultiplier
                 return;
             }
             // CraftBukkit end
@@ -1019,6 +1020,8 @@ public abstract class EntityLiving extends Entity {
 
     protected float applyArmorModifier(DamageSource damagesource, float f) {
         if (!damagesource.ignoresArmor()) {
+            float aether = org.aetherspigot.AetherHooks.armor(this, damagesource, f, this.br()); // AetherSpigot - armorDamageDivision
+            if (aether >= 0.0F) return aether;
             int i = 25 - this.br();
             float f1 = f * (float) i;
 
@@ -1048,6 +1051,8 @@ public abstract class EntityLiving extends Entity {
             if (f <= 0.0F) {
                 return 0.0F;
             } else {
+                float aether = org.aetherspigot.AetherHooks.protection(this, damagesource, f); // AetherSpigot - Protection sans aléatoire
+                if (aether >= 0.0F) return aether;
                 i = EnchantmentManager.a(this.getEquipment(), damagesource);
                 if (i > 20) {
                     i = 20;
