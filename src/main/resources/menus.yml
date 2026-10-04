@@ -1,0 +1,132 @@
+# Menu principal. Change les slots, items, noms et actions.
+# Actions: file:chemin.yml  file:chemin.yml#cle  knockback  players  reload  close
+# command:spawn
+gui:
+  main-title: "&5Aether"
+  category-title: "&5%name%"
+  sound-open: CLICK
+  sound-click: CLICK
+  sound-success: LEVEL_UP
+  sound-deny: ANVIL_LAND
+main:
+  title: "&5Aether"
+  size: 54
+  items:
+    pearls:
+      slot: 10
+      material: ENDER_PEARL
+      data: 0
+      name: "&dPerles"
+      lore:
+        - "&7Fences, slabs, refunds"
+        - "&eClic pour ouvrir"
+      action: "file:pearls.yml"
+    knockback:
+      slot: 12
+      material: DIAMOND_SWORD
+      data: 0
+      name: "&bKnockback"
+      lore:
+        - "&7Profils HCF, practice, combo"
+        - "&eClic pour ouvrir"
+      action: "knockback"
+    enchants:
+      slot: 14
+      material: ENCHANTED_BOOK
+      data: 0
+      name: "&eEnchantements"
+      lore:
+        - "&7Limites table et enclume"
+      action: "file:enchants.yml"
+    mechanics:
+      slot: 16
+      material: REDSTONE_COMPARATOR
+      data: 0
+      name: "&cMecaniques"
+      lore:
+        - "&7Ticks, joueurs, reseau, patches"
+      action: "file:aether.yml"
+    patches:
+      slot: 28
+      material: ANVIL
+      data: 0
+      name: "&6Patches 1.8.8"
+      lore:
+        - "&7Hit delay, regen, phase, potions"
+      action: "file:aether.yml#patches"
+    factions:
+      slot: 30
+      material: TNT
+      data: 0
+      name: "&4Factions"
+      lore:
+        - "&7TNT, obsidienne, canons"
+      action: "file:aether.yml#factions"
+    durability:
+      slot: 32
+      material: OBSIDIAN
+      data: 0
+      name: "&8Durabilite"
+      lore:
+        - "&7Hits d obsidienne"
+      action: "file:aether.yml#durability"
+    players:
+      slot: 34
+      material: SKULL_ITEM
+      data: 3
+      name: "&aJoueurs"
+      lore:
+        - "&7Profil de knockback par joueur"
+      action: "players"
+    messages:
+      slot: 19
+      material: BOOK_AND_QUILL
+      data: 0
+      name: "&fMessages"
+      lore:
+        - "&7Textes de toutes les commandes"
+      action: "file:messages.yml"
+    language:
+      slot: 20
+      material: PAPER
+      data: 0
+      name: "&fLangue"
+      lore:
+        - "&7Textes systeme"
+      action: "file:language.yml"
+    menus:
+      slot: 21
+      material: CHEST
+      data: 0
+      name: "&dMenus"
+      lore:
+        - "&7Ce menu. Recharge apres edition."
+      action: "file:menus.yml"
+    generator:
+      slot: 22
+      material: GRASS
+      data: 0
+      name: "&2Generation"
+      action: "file:generator/Default.yml"
+    via:
+      slot: 23
+      material: EYE_OF_ENDER
+      data: 0
+      name: "&5ViaVersion"
+      lore:
+        - "&7Clients 1.7 a 1.21+"
+      action: "file:via.yml"
+    loader:
+      slot: 24
+      material: WATCH
+      data: 0
+      name: "&7Loader"
+      action: "file:loader.yml"
+    reload:
+      slot: 49
+      material: NETHER_STAR
+      data: 0
+      name: "&aRecharger"
+      lore:
+        - "&7Relit tous les YAML"
+      action: "reload"

@@ -1,0 +1,232 @@
+# AetherSpigot — mecaniques principales, practice HCF, 1.8.8
+# Vert dans le menu = applique tout de suite. Rouge = enregistre pour un patch du jar.
+serverBranding: AetherSpigot
+worlds:
+  ticking:
+    disableBlockLighting: false
+    randomTickSpeed: 3
+    tickBlocks: true
+    tickTileEntities: true
+    tickBeacons: true
+    tickBrewingStands: true
+    tickHoppers: true
+    tickVillages: false
+    tickFurnaces: true
+    tickChunks: true
+    tickBiomeCache: true
+    tickWeather: false
+commands:
+  enableSpigotConfigCommand: true
+  enablePingCommand: true
+  enableTPSCommand: true
+  enableChunkUnloadCommand: true
+  enableClearLagCommand: true
+  enableSetMaxPlayersCommand: true
+  enableVersionCommand: true
+  enableKnockbackCommand: true
+chunks:
+  cacheChunkMaps: true
+  chunkLoadingThreads: 3
+  playersPerThread: 100
+  chunkUnloading: true
+  unloadPerTick: 150
+async-pathsearch:
+  enableAsyncPathSearch: true
+  pathSearchThreads: 3
+  minimumDistanceToTarget: 0.0
+  entitiesPathSearchOffload:
+    - BAT
+    - BLAZE
+    - CHICKEN
+    - COW
+    - CREEPER
+    - ENDERMAN
+    - HORSE
+    - IRON_GOLEM
+    - MAGMA_CUBE
+    - MUSHROOM_COW
+    - PIG
+    - PIG_ZOMBIE
+    - RABBIT
+    - SHEEP
+    - SKELETON
+    - SILVERFISH
+    - SLIME
+    - SNOWMAN
+    - SQUID
+    - WITCH
+    - ZOMBIE
+projectiles:
+  arrowTrajectoryRandomness: 1.0
+  rodTrajectoryRandomness: 1.0
+  snowballTrajectoryRandomness: 1.0
+  eggTrajectoryRandomness: 1.0
+  pearlTrajectoryRandomness: 1.0
+  potionTrajectoryRandomness: 1.0
+  overrideOnlyHealthPotion: true
+sounds:
+  itemFizzSounds: true
+  fluidFizzSounds: true
+  mobRandomSounds: true
+  explosionSounds: true
+  footstepSounds: false
+particles:
+  dispenserEffects: true
+  spawnerParticles: true
+  explosionParticles: true
+  tntParticles: true
+  footstepParticles: false
+modifiers:
+  furnaceModifier: 1.0
+  brewingModifier: 1.0
+  fallDamageModifier: 1.0
+  critDamageModifier: 1.5
+events:
+  firePlayerMoveEvent: true
+  fireBlockPhysicsEvent: true
+  fireHopperMoveItemEvent: true
+  fireSandBlockChangeEvent: true
+  fireSandPhysicsEvent: true
+  fireRedstonePhysicsEvent: true
+  fireTNTDispenseEvent: true
+blocks:
+  redstoneOptimization: EIGENCRAFT
+  gravelFall: true
+  grassSpread: true
+  grassSpreadLight: true
+  leafDecaying: true
+  dropFloatingPlants: true
+  dropExplosionBlocks: true
+  dispenserRandomness: true
+  pistonPushEntities: true
+  pistonMaxBlockPush: 12
+  infiniteWaterSources: true
+  waterDestroyRedstone: true
+  oldEnchantingSystem: false
+generating:
+  cobbleGenerating: true
+  stoneGenerating: true
+  obsidianGenerating: true
+sponges:
+  spongeRadius: 4
+  spongePreventWaterFlow: false
+  spongeInstantBreak: false
+spawners:
+  chunkMobLimit: 0
+  minimumSpawnDelay: 200
+  maximumSpawnDelay: 800
+  spawnCount: 4
+  spawnRange: 4.0
+  playerSpawnRange: 16.0
+  maximumNearbyEntities: 0
+  lightLevelCheck: true
+players:
+  playerBorderDamage: false
+  playerMovedTooQuicklyCheck: true
+  checkPlayerSleep: false
+  playerIdleTimer: false
+  playerPhaseLeniency: 0.0625
+  playerPhaseChestsAndAnvils: true
+  dynamicParalellisedTracking: true
+  playersNeededParalellisedTracking: 80
+  hideEntitiesThrownHidden: false
+  protRandomness: false
+  protectionModifier: 22.0
+  armorDamageDivision: 12.0
+  customArmorAndProtection: true
+  optimizePlayerPrinter: false
+  autoRespawnPlayer: true
+  potionLaunchOnClick:
+    - HOPPER
+    - CHEST
+    - ENDER_CHEST
+    - TRAPPED_CHEST
+    - FURNACE
+    - ANVIL
+    - WORKBENCH
+    - ENCHANTMENT_TABLE
+networking:
+  ipConsoleLog: false
+  writeAddPlayerPacketsLazily: false
+  networkBlockingJoin: true
+  tickPlayerLatency: true
+  parentNettyThreads: 1
+  childNettyThreads: 0
+knockback:
+  globalActiveKnockback: HCF
+  overrideDefaultKnockback: true
+  overrideRodKnockback: true
+  overrideArrowKnockback: true
+patches:
+  patchArrowBounceBug: true
+  patchDoubleHitBug: true
+  patchDropEatBug: true
+  patchGhostBuckets: true
+  patchProjectileMisdirection: true
+  patchHCFRegenBug: true
+  hcfRegenMultiplier: 0.5
+  obfuscateEntityEquipment: false
+  chatSpamPerSecond: 8
+  chatSpamKick: false
+menus:
+  fillerEnabled: true
+  fillerType: STAINED_GLASS_PANE
+  fillerData: 7
+  pageType: CARPET
+  pageData: 2
+  pageBackDisplay: "&dPage precedente"
+  pageBackLore:
+    - "&7Page &f%page%&7/&f%max-pages%"
+  pageForwardDisplay: "&dPage suivante"
+  pageForwardLore:
+    - "&7Page &f%page%&7/&f%max-pages%"
+  backButtonType: BED
+  backButtonData: 0
+  backButtonDisplay: "&cRetour"
+mobs:
+  mobAI: false
+  naturalMobSpawn: false
+  ironGolemFallDamage: true
+  snowGolemFallDamage: true
+  babyZombieSpawning: false
+  zombieOnChickenSpawning: false
+  villagerZombieSpawning: false
+  skeletonOnSpiderSpawning: false
+  entityCollisions: false
+  entityCollisionsDelay: 4
+factions:
+  fixFreecamCegging: false
+  sandMerging: false
+  tntMerging: false
+  hidePistonAnimations: false
+  hideTntEntity: false
+  hideSandEntity: false
+  fixSandChunkUnloading: true
+  optimizeTNTMovement: false
+  optimizeSandMovement: false
+  fixEastWestCannon: true
+durability:
+  explosionDestroyer: true
+  durabilityItemChecker: STONE_AXE
+  damageOnlyByTNT: true
+  blockDurabilities:
+    - obsidian:3
+    - bedrock:5
+    - ender_stone:5
+    - anvil:8
+  blockResistances:
+    - obsidian:35.0
+    - bedrock:60.0
+    - ender_stone:45.0
+    - anvil:2000.0
+clearlag:
+  items: true
+  arrows: true
+  xp: true
+  monsters: false
+practice:
+  hcf: true
+  pearlCooldownSeconds: 16
+  blockPearlsInSpawn: false
+  spawnRadius: 8.0
+  hungerLock: false

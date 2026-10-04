@@ -1,0 +1,13 @@
+# AetherSpigot — chargeur
+# Augmente config-version si la forme des fichiers change.
+loader-version: "1.0.0"
+config-version: 1
+minimum-supported: "1.0.0"
+allow-older-configs: true
+brand: AetherSpigot
+minecraft: "1.8.8"
+preset: HCF_PRACTICE
+java-recommended: "17"
+viaversion: "5.11.0"
+viabackwards: "5.11.0"
+viarewind: "4.1.3"

@@ -1,0 +1,101 @@
+# Perles HCF. Tout est modifiable dans le menu /config.
+antiGlitch:
+  fixBlockGlitch: true
+  fixFenceGlitch: true
+  refundSuffocation: true
+  refundRiskyPearl: true
+  refundOnCritblock: false
+  refundIfSoClose: true # rend la perle si le point d arrivee est trop proche
+  refundCloseDistance: 1.0
+  glitchReturnPearl: true
+  glitchReturnMessage: ''
+  glitchReturnCommand: ''
+teleport:
+  misc:
+    instantlyTaliTeleport: false
+    entityTpHitDetection: true
+    entityTpGetOutOneByOne: true # refuse la perle dans un couloir 1x1
+    spawnEndermite: false
+    pearlThruFence: true
+    pearlThruString: true
+    pearlThruWeb: true
+    pearlThruPlants: true
+    pearlHopperUnderFence: true
+    pearlChestUnderFence: true
+    pearlParticlesEnabled: true
+    pearlParticleCount: 32
+    pearlDamage: 5.0
+    crossPearlMoveHelper: 0.35 # avance le joueur dans le bloc traverse
+    hitBlockTeleport: true
+    beforeBlockTeleport: true
+    maxTeleportBlocks: 3
+    launchOnFenceClick: true
+    launchOnOtherClick:
+      - FURNACE
+      - BURNING_FURNACE
+      - ANVIL
+      - SIGN
+      - SIGN_POST
+      - WALL_SIGN
+      - HOPPER
+      - CHEST
+      - ENDER_CHEST
+      - TRAPPED_CHEST
+      - WORKBENCH
+      - ENCHANTMENT_TABLE
+      - BEACON
+slabs:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+stairs:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+chests:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+beds:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+cobblewalls:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+pistons:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+end-frames:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+enchant-tables:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+anvils:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+daylight-sensors:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true
+trapdoors:
+  enabled: true
+  crosspearl: true
+  diagonal: true
+  critblock: true

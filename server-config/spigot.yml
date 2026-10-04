@@ -1,0 +1,101 @@
+# Spigot 1.8.8 regle pour un practice HCF charge.
+# Copie ce fichier a la racine du serveur, a cote de spigot.jar.
+config-version: 8
+settings:
+  debug: false
+  save-user-cache-on-stop-only: true
+  bungeecord: false
+  late-bind: false
+  sample-count: 12
+  player-shuffle: 0
+  user-cache-size: 1000
+  moved-wrongly-threshold: 0.0625
+  moved-too-quickly-threshold: 100.0
+  timeout-time: 60
+  restart-on-crash: true
+  restart-script: ./start.sh
+  netty-threads: 4
+  attribute:
+    maxHealth:
+      max: 2048.0
+    movementSpeed:
+      max: 2048.0
+    attackDamage:
+      max: 2048.0
+messages:
+  whitelist: Tu n es pas sur la liste blanche.
+  unknown-command: Commande inconnue.
+  server-full: Le practice est plein.
+  outdated-client: Client trop ancien.
+  outdated-server: Serveur trop ancien.
+  restart: Redemarrage.
+commands:
+  tab-complete: 0
+  log: true
+  spam-exclusions:
+    - /skill
+  silent-commandblock-console: false
+  replace-commands:
+    - setblock
+    - summon
+    - testforblock
+    - tellraw
+stats:
+  disable-saving: false
+  forced-stats: {}
+world-settings:
+  default:
+    verbose: false
+    mob-spawn-range: 2
+    anti-xray:
+      enabled: false
+      engine-mode: 1
+      hide-blocks: []
+      replace-blocks: []
+    nerf-spawner-mobs: true
+    growth:
+      cactus-modifier: 100
+      cane-modifier: 100
+      melon-modifier: 100
+      mushroom-modifier: 100
+      pumpkin-modifier: 100
+      sapling-modifier: 100
+      wheat-modifier: 100
+    entity-activation-range:
+      animals: 8
+      monsters: 16
+      misc: 4
+    entity-tracking-range:
+      players: 48
+      animals: 24
+      monsters: 24
+      misc: 16
+      other: 32
+    ticks-per:
+      hopper-transfer: 24
+      hopper-check: 24
+    hopper-amount: 1
+    random-light-updates: false
+    save-structure-info: false
+    max-bulk-chunks: 5
+    max-entity-collisions: 2
+    dragon-death-sound-radius: 0
+    wither-spawn-sound-radius: 0
+    view-distance: 4
+    zombie-aggressive-towards-villager: false
+    merge-radius:
+      item: 4.0
+      exp: 6.0
+    item-despawn-rate: 4000
+    arrow-despawn-rate: 200
+    enable-zombie-pigmen-portal-spawns: false
+    hanging-tick-frequency: 100
+    max-tnt-per-tick: 100
+    hunger:
+      jump-walk-exhaustion: 0.05
+      jump-sprint-exhaustion: 0.2
+      combat-exhaustion: 0.1
+      regen-exhaustion: 6.0
+      swim-multiplier: 0.01
+      sprint-multiplier: 0.1
+      other-multiplier: 0.0

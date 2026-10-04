@@ -1,0 +1,33 @@
+# Plafonds d enchantement. La table et l enclume les respectent.
+# Practice HCF frequent: Protection II. Remonte a 4 si tu veux le vanilla.
+enchant-limits:
+  unbreaking: 3
+  armor:
+    protectionAll: 2
+    protectionFire: 4
+    protectionFall: 4
+    protectionExplosion: 4
+    protectionProjectile: 4
+    thorns: 3
+    aquaAffinity: 1
+    waterBreathing: 3
+    depthStrider: 3
+  tools:
+    efficiency: 5
+    silkTouch: 1
+    fortune: 3
+  swords:
+    sharpness: 5
+    baneOfArthropods: 5
+    smite: 5
+    fireAspect: 2
+    knockback: 2
+    looting: 3
+  bows:
+    power: 5
+    punch: 2
+    flame: 1
+    infinity: 1
+  rods:
+    lure: 3
+    luckOfTheSea: 3

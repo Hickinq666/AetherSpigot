@@ -1,0 +1,9 @@
+# Clients récents sur un serveur 1.8.8.
+# ViaVersion traduit le protocole. Ce fichier règle seulement le hook du plugin.
+enabled: true
+warn-if-missing: true
+show-client-version: true
+allow-newer: true
+# 0 = ne kick personne. 47 = 1.8. Mets 5 pour autoriser aussi les 1.7 via ViaRewind.
+kick-below-protocol: 0
+minimum-protocol: 5

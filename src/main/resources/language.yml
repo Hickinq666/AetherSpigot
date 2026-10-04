@@ -1,0 +1,10 @@
+# Textes système. Les réponses de commandes sont dans messages.yml.
+messages:
+  insufficientPerm: "&dAether &7| &cTu n as pas acces a cette commande."
+  onlyPlayer: "&dCette commande est reservee aux joueurs."
+  playerNotFound: "&eJoueur &d%player% &eintrouvable."
+  notValidType: "&eValeur &d%value% &einvalide pour le type &a%type%&e."
+  player:
+    disconnectSpam: "&cTu envoies trop de messages."
+    loggedInAnotherLocation: "Connexion depuis un autre endroit."
+    factionsDurabilityChecker: "&eDurabilite de &d%block%&e: &d%durability%"

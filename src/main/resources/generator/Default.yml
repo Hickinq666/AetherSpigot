@@ -1,0 +1,55 @@
+# Options de generation. Le monde deja cree ne change pas.
+# Elles restent editables pour un generateur qui les lit au premier boot.
+world:
+  generateOceans: false
+  generateWaterLakes: false
+  generateLavaLakes: false
+  cavesMultiplier: 1.0
+  sugarCaneMultiplier: 1.0
+  biomeReplacements:
+    - Ocean;Plains
+    - Deep Ocean;Plains
+    - FrozenOcean;Ice Plains
+    - Plains;none
+    - Desert;none
+    - Extreme Hills;none
+    - Forest;none
+    - Taiga;none
+    - Swampland;none
+    - River;none
+    - Hell;none
+    - The End;none
+spawn:
+  spawnBiomeRadius: 0
+  spawnBiome: plains
+  spawnBiomeRivers: false
+  spawnBiomeLakes: false
+ores:
+  coal:
+    coalMultiplier: 1.0
+    coalSize: 17
+    coalMustTouchAir: false
+  iron:
+    ironMultiplier: 1.0
+    ironSize: 9
+    ironMustTouchAir: false
+  gold:
+    goldMultiplier: 1.0
+    goldSize: 9
+    goldMustTouchAir: false
+  redstone:
+    redstoneMultiplier: 1.0
+    redstoneSize: 8
+    redstoneMustTouchAir: false
+  diamond:
+    diamondMultiplier: 1.0
+    diamondSize: 8
+    diamondMustTouchAir: false
+  lapis:
+    lapisMultiplier: 1.0
+    lapisSize: 7
+    lapisMustTouchAir: false
+  emerald:
+    emeraldMultiplier: 1.0
+    emeraldSize: 3
+    emeraldMustTouchAir: false
