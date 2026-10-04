@@ -72,15 +72,22 @@ public class EntityEnderPearl extends EntityProjectile {
                 EntityPlayer entityplayer = (EntityPlayer) entityliving;
 
                 if (entityplayer.playerConnection.a().isConnected() && entityplayer.world == this.world && !entityplayer.isSleeping()) {
+                    // AetherSpigot start - destination HCF décidée avant la téléportation
+                    net.aether.spigot.pearl.PearlService.Landing aether = org.aetherspigot.AetherHooks.pearlLanding(this, entityplayer, movingobjectposition);
+                    if (aether != null && aether.refund) {
+                        this.die();
+                        return;
+                    }
+                    // AetherSpigot end
                     // CraftBukkit start - Fire PlayerTeleportEvent
                     org.bukkit.craftbukkit.entity.CraftPlayer player = entityplayer.getBukkitEntity();
-                    org.bukkit.Location location = getBukkitEntity().getLocation();
+                    org.bukkit.Location location = aether != null ? aether.destination : getBukkitEntity().getLocation(); // AetherSpigot
                     location.setPitch(player.getLocation().getPitch());
                     location.setYaw(player.getLocation().getYaw());
 
                     // Nacho start - Anti ender pearl glitch
                     
-                    if (NachoConfig.antiEnderPearlGlitch) 
+                    if (aether == null && NachoConfig.antiEnderPearlGlitch) // AetherSpigot
                     {
 
                         double diffX = location.getBlockX() - player.getLocation().getBlockX();
@@ -111,7 +118,7 @@ public class EntityEnderPearl extends EntityProjectile {
                     Bukkit.getPluginManager().callEvent(teleEvent);
 
                     if (!teleEvent.isCancelled() && !entityplayer.playerConnection.isDisconnected()) {
-                        if ((this.random.nextFloat() < 0.05F) && (this.world.getGameRules().getBoolean("doMobSpawning")) && (world.nachoSpigotConfig.endermiteSpawning)) {
+                        if (org.aetherspigot.AetherHooks.pearlEndermite((this.random.nextFloat() < 0.05F) && (this.world.getGameRules().getBoolean("doMobSpawning")) && (world.nachoSpigotConfig.endermiteSpawning))) {
                             EntityEndermite entityendermite = new EntityEndermite(this.world);
 
                             entityendermite.a(true);
@@ -127,8 +134,14 @@ public class EntityEnderPearl extends EntityProjectile {
                     	Nacho.get().getLagCompensator().registerMovement(player, teleEvent.getTo()); // Nacho - register teleport
                         entityliving.fallDistance = 0.0F;
                         CraftEventFactory.entityDamage = this;
-                        entityliving.damageEntity(DamageSource.FALL, 5.0F);
+                        float aetherDamage = org.aetherspigot.AetherHooks.pearlDamage(5.0F); // AetherSpigot
+                        if (aetherDamage > 0.0F) {
+                            entityliving.damageEntity(DamageSource.FALL, aetherDamage);
+                        }
                         CraftEventFactory.entityDamage = null;
+                        if (aether != null) {
+                            org.aetherspigot.AetherHooks.pearlLanded(entityplayer, teleEvent.getTo()); // AetherSpigot
+                        }
                     }
                     // CraftBukkit end
                 }

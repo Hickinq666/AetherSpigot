@@ -13,6 +13,8 @@ import net.minecraft.server.EntityFishingHook;
 import net.minecraft.server.EntityHuman;
 import net.minecraft.server.EntityLiving;
 import net.minecraft.server.EntityPlayer;
+import net.minecraft.server.ItemStack;
+import net.minecraft.server.Items;
 import org.bukkit.entity.Player;
 
 /**
@@ -177,6 +179,123 @@ public final class AetherHooks {
             return net.aether.spigot.combat.CombatService.VANILLA;
         }
         return service.protection(((EntityPlayer) victim).getBukkitEntity(), cause, damage);
+    }
+
+    /** Niveau d'enchantement autorisé par enchants.yml ; 0 ou moins retire l'enchantement. */
+    public static int enchantLevel(int enchantId, int level) {
+        AetherCore core = AetherCore.get();
+        if (core == null || !core.isEnabled()) {
+            return level;
+        }
+        org.bukkit.enchantments.Enchantment enchantment = org.bukkit.enchantments.Enchantment.getById(enchantId);
+        return enchantment == null ? level : core.engine().enchants.cap(enchantment.getName(), level);
+    }
+
+    /** Applique les limites à une table id -> niveau. Retourne true si elle a changé. */
+    public static boolean capEnchants(java.util.Map<Integer, Integer> map) {
+        boolean changed = false;
+        java.util.Iterator<java.util.Map.Entry<Integer, Integer>> it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            java.util.Map.Entry<Integer, Integer> entry = it.next();
+            int level = entry.getValue().intValue();
+            int capped = enchantLevel(entry.getKey().intValue(), level);
+            if (capped <= 0) {
+                it.remove();
+                changed = true;
+            } else if (capped != level) {
+                entry.setValue(Integer.valueOf(capped));
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    /** Applique les limites aux enchantements d'un objet (livres compris). */
+    public static void capEnchants(ItemStack item) {
+        if (item == null || !item.hasTag()) {
+            return;
+        }
+        java.util.Map<Integer, Integer> map = EnchantmentManager.a(item);
+        if (!capEnchants(map)) {
+            return;
+        }
+        if (item.getItem() == Items.ENCHANTED_BOOK) {
+            item.getTag().remove("StoredEnchantments");
+        }
+        EnchantmentManager.a(map, item);
+    }
+
+    private static net.aether.spigot.pearl.PearlService pearls() {
+        AetherCore core = AetherCore.get();
+        return core == null || !core.isEnabled() ? null : core.pearls();
+    }
+
+    /** ItemEnderPearl, avant de créer la perle : cooldown et spawn. Le client a déjà retiré la perle, on le resynchronise. */
+    public static boolean pearlMayThrow(EntityHuman human) {
+        net.aether.spigot.pearl.PearlService service = pearls();
+        if (service == null || !(human instanceof EntityPlayer)) {
+            return true;
+        }
+        Player player = ((EntityPlayer) human).getBukkitEntity();
+        if (service.mayThrow(player)) {
+            return true;
+        }
+        player.updateInventory();
+        return false;
+    }
+
+    /** ItemEnderPearl, une fois la perle ajoutée au monde. */
+    public static void pearlThrown(EntityHuman human) {
+        net.aether.spigot.pearl.PearlService service = pearls();
+        if (service != null && human instanceof EntityPlayer) {
+            service.thrown(((EntityPlayer) human).getBukkitEntity());
+        }
+    }
+
+    /** Clic droit sur un bloc (barrière, liste launchOnOtherClick) : la perle part au lieu d'utiliser le bloc. */
+    public static boolean pearlForcesLaunch(ItemStack hand, net.minecraft.server.Block clicked) {
+        net.aether.spigot.pearl.PearlService service = pearls();
+        if (service == null || hand == null || hand.getItem() != Items.ENDER_PEARL) {
+            return false;
+        }
+        org.bukkit.Material type = org.bukkit.craftbukkit.util.CraftMagicNumbers.getMaterial(clicked);
+        return type != null && service.forcesLaunch(type);
+    }
+
+    /**
+     * EntityEnderPearl à l'impact, avant le PlayerTeleportEvent. null : comportement NachoSpigot.
+     * Un remboursement est déjà appliqué quand le résultat a {@code refund}.
+     */
+    public static net.aether.spigot.pearl.PearlService.Landing pearlLanding(net.minecraft.server.EntityEnderPearl pearl,
+                                                                            EntityPlayer thrower, net.minecraft.server.MovingObjectPosition hit) {
+        net.aether.spigot.pearl.PearlService service = pearls();
+        if (service == null) {
+            return null;
+        }
+        org.bukkit.World world = pearl.world.getWorld();
+        org.bukkit.block.Block block = null;
+        if (hit.type == net.minecraft.server.MovingObjectPosition.EnumMovingObjectType.BLOCK && hit.a() != null) {
+            block = world.getBlockAt(hit.a().getX(), hit.a().getY(), hit.a().getZ());
+        }
+        return service.land(thrower.getBukkitEntity(), block, new org.bukkit.Location(world, pearl.locX, pearl.locY, pearl.locZ),
+                new org.bukkit.util.Vector(pearl.motX, pearl.motY, pearl.motZ));
+    }
+
+    public static void pearlLanded(EntityPlayer thrower, org.bukkit.Location dest) {
+        net.aether.spigot.pearl.PearlService service = pearls();
+        if (service != null) {
+            service.landed(thrower.getBukkitEntity(), dest);
+        }
+    }
+
+    public static float pearlDamage(float vanilla) {
+        net.aether.spigot.pearl.PearlService service = pearls();
+        return service == null ? vanilla : service.damage();
+    }
+
+    public static boolean pearlEndermite(boolean vanilla) {
+        net.aether.spigot.pearl.PearlService service = pearls();
+        return service == null ? vanilla : vanilla && service.endermite();
     }
 
     /** Le bonus Punch est déjà dans le knockback de flèche du profil. */

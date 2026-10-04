@@ -215,7 +215,11 @@ public class ContainerEnchantTable extends Container {
                     Map<org.bukkit.enchantments.Enchantment, Integer> enchants = new java.util.HashMap<org.bukkit.enchantments.Enchantment, Integer>();
                     for (Object obj : list) {
                         WeightedRandomEnchant instance = (WeightedRandomEnchant) obj;
-                        enchants.put(org.bukkit.enchantments.Enchantment.getById(instance.enchantment.id), instance.level);
+                        int aetherLevel = org.aetherspigot.AetherHooks.enchantLevel(instance.enchantment.id, instance.level); // AetherSpigot
+                        if (aetherLevel <= 0) {
+                            continue;
+                        }
+                        enchants.put(org.bukkit.enchantments.Enchantment.getById(instance.enchantment.id), aetherLevel);
                     }
                     CraftItemStack item = CraftItemStack.asCraftMirror(itemstack);
 

@@ -5,14 +5,13 @@ import net.aether.spigot.command.CommandBridge;
 import net.aether.spigot.config.ConfigStore;
 import net.aether.spigot.config.Engine;
 import net.aether.spigot.config.YamlDoc;
-import net.aether.spigot.enchant.EnchantListener;
 import net.aether.spigot.knockback.KnockbackService;
 import net.aether.spigot.knockback.KnockbackProfile;
 import net.aether.spigot.menu.MenuListener;
 import net.aether.spigot.menu.MenuService;
 import net.aether.spigot.message.MessageService;
 import net.aether.spigot.patch.PatchListener;
-import net.aether.spigot.pearl.PearlListener;
+import net.aether.spigot.pearl.PearlService;
 import net.aether.spigot.runtime.SupportMatrix;
 import net.aether.spigot.runtime.TpsCounter;
 import net.aether.spigot.via.ViaHook;
@@ -74,6 +73,7 @@ public final class AetherCore extends PluginBase {
     private MenuService menus;
     private KnockbackService knockback;
     private net.aether.spigot.combat.CombatService combat;
+    private PearlService pearls;
     private final Map<UUID, String> playerKnockback = new ConcurrentHashMap<UUID, String>();
     private final Map<UUID, EditSession> edits = new ConcurrentHashMap<UUID, EditSession>();
     private final long startedAt = System.currentTimeMillis();
@@ -127,11 +127,10 @@ public final class AetherCore extends PluginBase {
         menus = new MenuService(this);
         knockback = new KnockbackService(this);
         combat = new net.aether.spigot.combat.CombatService(this);
+        pearls = new PearlService(this);
         loadPlayerProfiles();
         server.getPluginManager().registerEvents(new MenuListener(this), this);
-        server.getPluginManager().registerEvents(new PearlListener(this), this);
         server.getPluginManager().registerEvents(new PatchListener(this), this);
-        server.getPluginManager().registerEvents(new EnchantListener(this), this);
         registerCommands(new CommandBridge(this));
         server.getScheduler().runTaskTimer(this, tps, 1L, 1L);
         applyWorlds();
@@ -206,6 +205,10 @@ public final class AetherCore extends PluginBase {
 
     public net.aether.spigot.combat.CombatService combat() {
         return combat;
+    }
+
+    public PearlService pearls() {
+        return pearls;
     }
 
     public KnockbackService knockback() {

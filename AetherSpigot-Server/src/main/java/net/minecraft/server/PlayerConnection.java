@@ -860,6 +860,12 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 return;
             }
 
+            // AetherSpigot start - la perle part au lieu d'utiliser la barrière
+            if (!throttled && org.aetherspigot.AetherHooks.pearlForcesLaunch(itemstack, worldserver.getType(blockposition).getBlock())) {
+                this.player.playerInteractManager.useItem(this.player, worldserver, itemstack);
+                always = true;
+            } else
+            // AetherSpigot end
             if (this.checkMovement && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.getWorldBorder().a(blockposition)) {
                 always = throttled || !this.player.playerInteractManager.interact(this.player, worldserver, itemstack, blockposition, enumdirection, packetplayinblockplace.d(), packetplayinblockplace.e(), packetplayinblockplace.f());
             }
@@ -1900,6 +1906,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         if (this.player.playerInteractManager.isCreative()) {
             boolean flag = packetplayinsetcreativeslot.a() < 0;
             ItemStack itemstack = packetplayinsetcreativeslot.getItemStack();
+            org.aetherspigot.AetherHooks.capEnchants(itemstack); // AetherSpigot
 
             if (itemstack != null && itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
                 NBTTagCompound nbttagcompound = itemstack.getTag().getCompound("BlockEntityTag");

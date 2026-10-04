@@ -296,6 +296,7 @@ public class ContainerAnvil extends Container {
 
                 k = k * 2 + 1;
                 itemstack1.setRepairCost(k);
+                org.aetherspigot.AetherHooks.capEnchants(map); // AetherSpigot
                 EnchantmentManager.a(map, itemstack1);
             }
 
