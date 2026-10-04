@@ -4,13 +4,13 @@ Serveur **Spigot 1.8.8** pour le practice HCF. Le jar à lancer est `bundle/Aeth
 
 ## Lancer
 
-Pose `AetherSpigot-1.8.8.jar` dans le dossier du serveur. Renomme-le `spigot.jar` si ton hébergeur l'exige. Puis, avec Java 17 :
+Pose `run.sh` et `AetherSpigot-1.8.8.jar` (ou ce jar renommé `spigot.jar`) dans le dossier du serveur, puis :
 
 ```bash
-java -Xms4G -Xmx4G -jar AetherSpigot-1.8.8.jar
+sh run.sh
 ```
 
-Au tout premier lancement, il prend le server.jar 1.8.8 officiel chez Mojang (8 Mo, vérifié par SHA-1) et le patche en 2 à 3 secondes dans `cache/`. Les lancements suivants démarrent directement. Rien à compiler, pas de BuildTools.
+Au tout premier lancement, `run.sh` prend le server.jar 1.8.8 officiel chez Mojang (8 Mo, vérifié par SHA-1), le patche en quelques secondes et écrit `spigot.jar`, le serveur complet (28 Mo). Ensuite il lance `spigot.jar` directement, sans rien télécharger. Rien à compiler, pas de BuildTools.
 
 Il écrit ensuite `server.properties`, `bukkit.yml` et `spigot.yml` avec le preset HCF (400 slots, view-distance 4, sans mobs) et installe dans `plugins/` le moteur practice et ViaVersion.
 
