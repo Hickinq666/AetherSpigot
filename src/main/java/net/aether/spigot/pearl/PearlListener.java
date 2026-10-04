@@ -186,8 +186,17 @@ public final class PearlListener implements Listener {
             }
             if (engine.pearls.pearlParticlesEnabled) {
                 int count = Math.min(48, Math.max(1, engine.pearls.pearlParticleCount));
-                for (int i = 0; i < count; i++) {
-                    player.getWorld().playEffect(dest, Effect.ENDER_SIGNAL, 0);
+                for (Player viewer : player.getWorld().getPlayers()) {
+                    // Un joueur qui a caché le lanceur ne doit pas voir ses particules.
+                    if (viewer != player && !viewer.canSee(player)) {
+                        continue;
+                    }
+                    if (viewer.getLocation().distanceSquared(dest) > 64.0D * 64.0D) {
+                        continue;
+                    }
+                    for (int i = 0; i < count; i++) {
+                        viewer.playEffect(dest, Effect.ENDER_SIGNAL, 0);
+                    }
                 }
             }
             if (engine.pearls.spawnEndermite) {

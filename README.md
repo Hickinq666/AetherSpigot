@@ -42,6 +42,7 @@ python3 scripts/make_server_jar.py
 | --- | --- |
 | Nom | `/version`, F3 et la liste des serveurs affichent AetherSpigot |
 | Démarrage | Configs HCF et plugins installés depuis le jar. Un plugin du même nom déjà présent sous un autre fichier est gardé |
+| Isolation | Un joueur caché avec `hidePlayer` est caché entièrement : ses flèches, perles, potions, bouchon de canne, items jetés et TNT n'apparaissent pas, ses sons et ses effets (potion qui se brise, bloc posé) ne sont pas envoyés. Ses projectiles et ses potions ne touchent pas les joueurs qui ne le voient pas, et il ne ramasse pas leurs items. Désactivable avec `-Daether.isolation=false` |
 | Réseau Java 17 | Le Netty de la 1.8.8 plante en epoll sur Java 9+ (« Unable to access address of buffer »). Le serveur passe en NIO tout seul |
 
 Pour retélécharger ViaVersion :

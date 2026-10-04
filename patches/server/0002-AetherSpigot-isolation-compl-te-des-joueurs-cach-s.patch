@@ -1,0 +1,285 @@
+From c9b0cd1bfe45b9c9a42714b60b19b89589151192 Mon Sep 17 00:00:00 2001
+From: Hickiqn Hickinq <hickinq@gmail.com>
+Date: Sun, 4 Oct 2026 13:22:28 +0000
+Subject: [PATCH 2/2] =?UTF-8?q?AetherSpigot:=20isolation=20compl=C3=A8te?=
+ =?UTF-8?q?=20des=20joueurs=20cach=C3=A9s?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../net/minecraft/server/EntityArrow.java     |  2 +-
+ .../minecraft/server/EntityFishingHook.java   |  2 +-
+ .../java/net/minecraft/server/EntityItem.java |  1 +
+ .../net/minecraft/server/EntityPotion.java    |  1 +
+ .../minecraft/server/EntityProjectile.java    |  2 +-
+ .../minecraft/server/EntityTrackerEntry.java  |  2 +-
+ .../minecraft/server/PlayerConnection.java    | 24 +++++
+ .../java/net/minecraft/server/PlayerList.java |  1 +
+ src/main/java/net/minecraft/server/World.java |  6 ++
+ src/main/java/org/aetherspigot/Isolation.java | 89 +++++++++++++++++++
+ 10 files changed, 126 insertions(+), 4 deletions(-)
+ create mode 100644 src/main/java/org/aetherspigot/Isolation.java
+
+diff --git a/src/main/java/net/minecraft/server/EntityArrow.java b/src/main/java/net/minecraft/server/EntityArrow.java
+index 3a807761..b4c9f4c0 100644
+--- a/src/main/java/net/minecraft/server/EntityArrow.java
++++ b/src/main/java/net/minecraft/server/EntityArrow.java
+@@ -189,7 +189,7 @@ public class EntityArrow extends Entity implements IProjectile {
+             for (j = 0; j < list.size(); ++j) {
+                 Entity entity1 = (Entity) list.get(j);
+ 
+-                if (entity1.ad() && (entity1 != this.shooter || this.as >= 5)) {
++                if (entity1.ad() && (entity1 != this.shooter || this.as >= 5) && !org.aetherspigot.Isolation.blocked(this, entity1)) { // AetherSpigot
+                     f1 = 0.3F;
+                     AxisAlignedBB axisalignedbb1 = entity1.getBoundingBox().grow((double) f1, (double) f1, (double) f1);
+                     MovingObjectPosition movingobjectposition1 = axisalignedbb1.a(vec3d, vec3d1);
+diff --git a/src/main/java/net/minecraft/server/EntityFishingHook.java b/src/main/java/net/minecraft/server/EntityFishingHook.java
+index 503e78a7..852e2770 100644
+--- a/src/main/java/net/minecraft/server/EntityFishingHook.java
++++ b/src/main/java/net/minecraft/server/EntityFishingHook.java
+@@ -168,7 +168,7 @@ public class EntityFishingHook extends Entity {
+             for (int i = 0; i < list.size(); ++i) {
+                 Entity entity1 = (Entity) list.get(i);
+ 
+-                if (entity1.ad() && (entity1 != this.owner || this.au >= 5)) {
++                if (entity1.ad() && (entity1 != this.owner || this.au >= 5) && !org.aetherspigot.Isolation.blocked(this, entity1)) { // AetherSpigot
+                     float f = 0.3F;
+                     AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow((double) f, (double) f, (double) f);
+                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
+diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
+index 1f8b1c72..c2007428 100644
+--- a/src/main/java/net/minecraft/server/EntityItem.java
++++ b/src/main/java/net/minecraft/server/EntityItem.java
+@@ -299,6 +299,7 @@ public class EntityItem extends Entity {
+     }
+ 
+     public void d(EntityHuman entityhuman) {
++        if (entityhuman instanceof EntityPlayer && org.aetherspigot.Isolation.hidden((EntityPlayer) entityhuman, this)) return; // AetherSpigot
+         if (!this.world.isClientSide) {
+             ItemStack itemstack = this.getItemStack();
+             int i = itemstack.count;
+diff --git a/src/main/java/net/minecraft/server/EntityPotion.java b/src/main/java/net/minecraft/server/EntityPotion.java
+index fd174c34..31c1987c 100644
+--- a/src/main/java/net/minecraft/server/EntityPotion.java
++++ b/src/main/java/net/minecraft/server/EntityPotion.java
+@@ -76,6 +76,7 @@ public class EntityPotion extends EntityProjectile {
+ 
+                     while (iterator.hasNext()) {
+                         EntityLiving entityliving = (EntityLiving) iterator.next();
++                        if (org.aetherspigot.Isolation.blocked(this, entityliving)) continue; // AetherSpigot
+                         double d0 = this.h(entityliving);
+ 
+                         if (d0 < 16.0D) {
+diff --git a/src/main/java/net/minecraft/server/EntityProjectile.java b/src/main/java/net/minecraft/server/EntityProjectile.java
+index 72478be8..64a28b8a 100644
+--- a/src/main/java/net/minecraft/server/EntityProjectile.java
++++ b/src/main/java/net/minecraft/server/EntityProjectile.java
+@@ -126,7 +126,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
+             for (int i = 0; i < list.size(); ++i) {
+                 Entity entity1 = (Entity) list.get(i);
+ 
+-                if (entity1.ad() && (entity1 != entityliving || this.ar >= 5)) {
++                if (entity1.ad() && (entity1 != entityliving || this.ar >= 5) && !org.aetherspigot.Isolation.blocked(this, entity1)) { // AetherSpigot
+                     float f = 0.3F;
+                     AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow((double) f, (double) f, (double) f);
+                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index f0149bf2..efce4098 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -312,7 +312,7 @@ public class EntityTrackerEntry {
+     public void updatePlayer(EntityPlayer entityplayer) {
+         org.spigotmc.AsyncCatcher.catchOp( "player tracker update"); // Spigot
+         if (entityplayer != this.tracker) {
+-            if (this.c(entityplayer)) {
++            if (this.c(entityplayer) && !org.aetherspigot.Isolation.hidden(entityplayer, this.tracker)) { // AetherSpigot
+                 if (!this.trackedPlayers.contains(entityplayer) && (this.e(entityplayer) || this.tracker.attachedToPlayer)) {
+                     // CraftBukkit start - respect vanish API
+                     if (this.tracker instanceof EntityPlayer) {
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 5740e492..6288a5d1 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -563,7 +563,19 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+         this.player.playerConnection.sendPacket(new PacketPlayOutPosition(d0, d1, d2, f, f1, set));
+     }
+ 
++    // AetherSpigot start - le joueur est la source des sons émis pendant ce paquet
+     public void a(PacketPlayInBlockDig packetplayinblockdig) {
++        PlayerConnectionUtils.ensureMainThread(packetplayinblockdig, this, this.player.u());
++        Entity aetherPrevious = org.aetherspigot.Isolation.push(this.player);
++        try {
++            this.aetherBlockDig(packetplayinblockdig);
++        } finally {
++            org.aetherspigot.Isolation.pop(aetherPrevious);
++        }
++    }
++
++    private void aetherBlockDig(PacketPlayInBlockDig packetplayinblockdig) {
++    // AetherSpigot end
+         PlayerConnectionUtils.ensureMainThread(packetplayinblockdig, this, this.player.u());
+         if (this.player.dead) return; // CraftBukkit
+         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+@@ -657,7 +669,19 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+     private long lastPlace = -1;
+     private int packets = 0;
+ 
++    // AetherSpigot start - le joueur est la source des sons émis pendant ce paquet
+     public void a(PacketPlayInBlockPlace packetplayinblockplace) {
++        PlayerConnectionUtils.ensureMainThread(packetplayinblockplace, this, this.player.u());
++        Entity aetherPrevious = org.aetherspigot.Isolation.push(this.player);
++        try {
++            this.aetherBlockPlace(packetplayinblockplace);
++        } finally {
++            org.aetherspigot.Isolation.pop(aetherPrevious);
++        }
++    }
++
++    private void aetherBlockPlace(PacketPlayInBlockPlace packetplayinblockplace) {
++    // AetherSpigot end
+         PlayerConnectionUtils.ensureMainThread(packetplayinblockplace, this, this.player.u());
+         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+         boolean throttled = false;
+diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
+index da576bcd..143a856d 100644
+--- a/src/main/java/net/minecraft/server/PlayerList.java
++++ b/src/main/java/net/minecraft/server/PlayerList.java
+@@ -1041,6 +1041,7 @@ public abstract class PlayerList {
+                continue;
+             }
+             // CraftBukkit end
++            if (org.aetherspigot.Isolation.hiddenFromCurrent(entityplayer)) continue; // AetherSpigot
+ 
+             if (entityplayer != entityhuman && entityplayer.dimension == i) {
+                 double d4 = d0 - entityplayer.locX;
+diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
+index eca86db8..d2fd4df8 100644
+--- a/src/main/java/net/minecraft/server/World.java
++++ b/src/main/java/net/minecraft/server/World.java
+@@ -937,9 +937,12 @@ public abstract class World implements IBlockAccess {
+     }
+ 
+     public void makeSound(Entity entity, String s, float f, float f1) {
++        Entity aetherPrevious = org.aetherspigot.Isolation.push(entity); // AetherSpigot
++        try {
+         for (int i = 0; i < this.u.size(); ++i) {
+             ((IWorldAccess) this.u.get(i)).a(s, entity.locX, entity.locY, entity.locZ, f, f1);
+         }
++        } finally { org.aetherspigot.Isolation.pop(aetherPrevious); } // AetherSpigot
+ 
+     }
+ 
+@@ -1601,11 +1604,14 @@ public abstract class World implements IBlockAccess {
+             entity.lastPitch = entity.pitch;
+             if (flag && entity.ad) {
+                 ++entity.ticksLived;
++                Entity aetherPrevious = org.aetherspigot.Isolation.push(entity); // AetherSpigot
++                try {
+                 if (entity.vehicle != null) {
+                     entity.ak();
+                 } else {
+                     entity.t_();
+                 }
++                } finally { org.aetherspigot.Isolation.pop(aetherPrevious); } // AetherSpigot
+             }
+ 
+             this.methodProfiler.a("chunkCheck");
+diff --git a/src/main/java/org/aetherspigot/Isolation.java b/src/main/java/org/aetherspigot/Isolation.java
+new file mode 100644
+index 00000000..191afa45
+--- /dev/null
++++ b/src/main/java/org/aetherspigot/Isolation.java
+@@ -0,0 +1,89 @@
++package org.aetherspigot;
++
++import net.minecraft.server.Entity;
++import net.minecraft.server.EntityArrow;
++import net.minecraft.server.EntityFishingHook;
++import net.minecraft.server.EntityItem;
++import net.minecraft.server.EntityPlayer;
++import net.minecraft.server.EntityProjectile;
++import net.minecraft.server.EntityTNTPrimed;
++import net.minecraft.server.MinecraftServer;
++
++/**
++ * Isolation des joueurs cachés ({@code Player#hidePlayer}). Un joueur qui ne voit pas X ne reçoit rien
++ * de X ni de ce qui lui appartient : flèches, perles, potions, bouchon de canne, items jetés, TNT, sons,
++ * effets de monde. Les projectiles de X ne le touchent pas non plus, et inversement.
++ *
++ * <p>La source d'un son ou d'un effet émis par coordonnées est l'entité en cours de tick, ou le joueur
++ * dont le paquet est en cours de traitement. Tout se passe sur le thread principal.
++ */
++public final class Isolation {
++
++    public static final boolean ENABLED = !"false".equalsIgnoreCase(System.getProperty("aether.isolation"));
++
++    private static Entity current;
++
++    private Isolation() {
++    }
++
++    public static Entity push(Entity source) {
++        Entity previous = current;
++        current = source;
++        return previous;
++    }
++
++    public static void pop(Entity previous) {
++        current = previous;
++    }
++
++    /** Joueur responsable de cette entité, ou null. */
++    public static EntityPlayer owner(Entity entity) {
++        if (entity instanceof EntityPlayer) {
++            return (EntityPlayer) entity;
++        }
++        Entity owner = null;
++        if (entity instanceof EntityArrow) {
++            owner = ((EntityArrow) entity).shooter;
++        } else if (entity instanceof EntityProjectile) {
++            owner = ((EntityProjectile) entity).getShooter();
++        } else if (entity instanceof EntityFishingHook) {
++            owner = ((EntityFishingHook) entity).owner;
++        } else if (entity instanceof EntityTNTPrimed) {
++            owner = ((EntityTNTPrimed) entity).getSource();
++        } else if (entity instanceof EntityItem) {
++            String thrower = ((EntityItem) entity).n();
++            if (thrower != null) {
++                owner = MinecraftServer.getServer().getPlayerList().getPlayer(thrower);
++            }
++        }
++        return owner instanceof EntityPlayer ? (EntityPlayer) owner : null;
++    }
++
++    /** Vrai si {@code viewer} ne doit rien recevoir de {@code entity}. */
++    public static boolean hidden(EntityPlayer viewer, Entity entity) {
++        if (!ENABLED || entity == null) {
++            return false;
++        }
++        EntityPlayer owner = owner(entity);
++        return owner != null && owner != viewer && !viewer.getBukkitEntity().canSee(owner.getBukkitEntity());
++    }
++
++    /** Vrai si le son ou l'effet en cours ne doit pas partir vers {@code viewer}. */
++    public static boolean hiddenFromCurrent(EntityPlayer viewer) {
++        return current != null && hidden(viewer, current);
++    }
++
++    /** Vrai si {@code source} (un projectile, une potion) ne doit pas toucher {@code target}. */
++    public static boolean blocked(Entity source, Entity target) {
++        if (!ENABLED || !(target instanceof EntityPlayer)) {
++            return false;
++        }
++        EntityPlayer owner = owner(source);
++        if (owner == null || owner == target) {
++            return false;
++        }
++        EntityPlayer player = (EntityPlayer) target;
++        return !player.getBukkitEntity().canSee(owner.getBukkitEntity())
++                || !owner.getBukkitEntity().canSee(player.getBukkitEntity());
++    }
++}
+-- 
+2.43.0
+
