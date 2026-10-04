@@ -26,7 +26,12 @@ Le jar contient le code de Mojang : garde ce dépôt et le jar privés.
 | --- | --- |
 | Nom | `/version`, F3 et la liste des serveurs affichent AetherSpigot. Le blocage « NachoSpigot n'est plus maintenu » au démarrage est retiré |
 | Practice dans le serveur | `net.aether.spigot` (configs, menu, perles, combat, enchantements, `/hide`, `/see`) est compilé dans le serveur. `CraftServer` le démarre avant les plugins. Il n'apparaît pas dans `/plugins` |
-| Knockback | Calculé dans `EntityHuman.attack` (corps à corps) et `EntityLiving` (flèches), dans le tick du coup, avec le profil actif de `aether/knockback/`. `/kb` de NachoSpigot est remplacé par `/knockback` |
+| Patches dans le code du serveur | Aucun patch gameplay n'est un listener qui corrige après coup : chaque règle est appelée par le code Minecraft au moment où il décide (`org.aetherspigot.AetherHooks` et `PatchHooks`). Seul le menu `/aether` utilise les événements d'inventaire |
+| Knockback | Calculé à la place de la formule NachoSpigot dans `EntityLiving` (corps à corps, flèche, bouchon de canne au contact) avec le profil actif de `aether/knockback/`. Le hit delay est posé au début de `damageEntity`. `/kb` de NachoSpigot est remplacé par `/knockback` |
+| Dégâts | Critique, armure, Protection sans aléatoire et chute calculés dans `EntityHuman.attack` et `EntityLiving` |
+| Perles | Cooldown et spawn vérifiés dans `ItemEnderPearl` avant que la perle existe. À l'impact, `EntityEnderPearl` choisit la destination HCF (fences, slabs, refund) avant de téléporter : le joueur n'est jamais déplacé puis corrigé. Lancer sur clic de fence dans `PlayerConnection` |
+| Enchantements | Plafonds appliqués pendant le calcul de la table, de l'enclume et du slot créatif |
+| Autres patches | Dispersion des projectiles et vitesse des potions à la création du projectile, anti-phase dans le paquet de déplacement, anti-spam dans le paquet de chat, drop pendant qu'on mange, faim, régénération, lit, apparitions, IA des monstres, chute des golems, durabilité des blocs pendant le calcul de l'explosion, respawn automatique, refus des clients trop anciens au login |
 | Isolation | Un joueur caché avec `hidePlayer` est caché entièrement : ses flèches, perles, potions, bouchon de canne, items jetés et TNT n'apparaissent pas, ses sons et ses effets (potion qui se brise, flèche qui touche, bloc posé) ne sont pas envoyés. Ses projectiles et ses potions ne touchent pas les joueurs qui ne le voient pas, et il ne ramasse pas leurs items. Désactivable avec `-Daether.isolation=false` |
 | Démarrage | Configs HCF et ViaVersion installés depuis le jar |
 
