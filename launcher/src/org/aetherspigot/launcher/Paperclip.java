@@ -58,10 +58,45 @@ public final class Paperclip {
                 write(stamp, expected + "\n");
                 say("Serveur prêt en " + (System.currentTimeMillis() - started) / 1000.0 + " s.");
             }
+            if (args.length > 0 && "--export".equals(args[0])) {
+                File target = new File(args.length > 1 ? args[1] : "spigot.jar").getAbsoluteFile();
+                if (target.getCanonicalPath().equals(selfPath())) {
+                    throw new IOException("choisis un autre nom que celui du jar lancé : java -jar " + new File(selfPath()).getName() + " --export AetherSpigot-complet.jar");
+                }
+                copy(server, target);
+                say("Jar serveur complet écrit : " + target.getPath() + " (" + target.length() / 1000000 + " Mo).");
+                say("Il contient tout et ne télécharge plus rien. Lance-le avec : java -jar " + target.getName());
+                say("Ne le partage pas publiquement : il contient le code de Mojang.");
+                System.exit(0);
+            }
             System.exit(run(server, args));
         } catch (Exception ex) {
             System.out.println(TAG + "Démarrage impossible : " + ex.getMessage());
             System.exit(1);
+        }
+    }
+
+    private static String selfPath() {
+        try {
+            return new File(Paperclip.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getCanonicalPath();
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    private static void copy(File from, File to) throws IOException {
+        File part = new File(to.getPath() + ".part");
+        InputStream in = new FileInputStream(from);
+        OutputStream out = new FileOutputStream(part);
+        try {
+            pipe(in, out);
+        } finally {
+            in.close();
+            out.close();
+        }
+        to.delete();
+        if (!part.renameTo(to)) {
+            throw new IOException("impossible d'écrire " + to.getPath());
         }
     }
 
