@@ -6,20 +6,29 @@ Les clients 1.7 à 1.21 rejoignent le serveur 1.8.8 grâce aux jars ViaVersion d
 
 ## Lancer le practice
 
-1. Construis un Spigot 1.8.8 avec [BuildTools](https://www.spigotmc.org/wiki/buildtools/) (Java 17 recommandé, ViaVersion 5.11.0 en a besoin).
-2. Copie `server-config/server.properties`, `server-config/bukkit.yml` et `server-config/spigot.yml` à la racine du serveur.
-3. Copie dans `plugins/` :
-   - `bundle/plugins/AetherSpigot.jar` (ou `target/AetherSpigot.jar` après `mvn package`)
-   - `bundle/plugins/ViaVersion-5.11.0.jar`
-   - `bundle/plugins/ViaBackwards-5.11.0.jar`
-   - `bundle/plugins/ViaRewind-4.1.3.jar`
-4. Démarre :
+`AetherSpigot.jar` est le plugin. Le serveur est un autre fichier, `spigot-1.8.8.jar`, construit avec BuildTools.
 
-```bash
-java -Xms4G -Xmx4G -jar spigot-1.8.8.jar nogui
+Si le terminal affiche :
+
+```text
+no main manifest attribute, in spigot.jar
+run.sh: 2: pause: not found
 ```
 
-Au premier démarrage, le plugin écrit ses YAML dans `plugins/AetherSpigot/`.
+la première ligne veut dire que `java -jar` a ouvert le plugin (souvent renommé `spigot.jar`). La deuxième vient de `pause`, une commande de l'invite Windows : sous Linux elle n'existe pas. Le `run.sh` de ce dépôt ne l'appelle pas.
+
+```bash
+sh scripts/build-spigot.sh
+sh run.sh
+```
+
+`scripts/build-spigot.sh` télécharge BuildTools et produit `server/spigot-1.8.8.jar`. La compilation de Spigot 1.8.8 passe avec Java 8 ou Java 17. Java 21 casse souvent les vieux plugins Maven de BuildTools. ViaVersion 5.11.0, lui, a besoin de Java 17 ou plus pour tourner : compile avec 17 si tu peux, joue avec 17.
+
+`sh run.sh` copie `server-config/` et `bundle/plugins/` dans `server/`, puis lance le jar dont le manifeste contient `org.bukkit.craftbukkit.Main`. Mémoire par défaut : 4G (`AETHER_XMS` et `AETHER_XMX` pour changer). Au premier arrêt, lis `server/eula.txt` et passe `eula=true`.
+
+Le plugin écrit ses YAML dans `server/plugins/AetherSpigot/` au premier démarrage.
+
+À la main, sans le script : construis un Spigot 1.8.8 avec [BuildTools](https://www.spigotmc.org/wiki/buildtools/), copie `server-config/server.properties`, `bukkit.yml` et `spigot.yml` à la racine du serveur, copie le contenu de `bundle/plugins/` dans `plugins/`, puis `java -Xms4G -Xmx4G -jar spigot-1.8.8.jar nogui`.
 
 Pour retélécharger ViaVersion :
 
