@@ -116,7 +116,7 @@ editor:
   set: "&e%setting% &7-> &a%value%"
   savedServer: "&e%setting% &7enregistre (&c%value%&7). Ce reglage vit dans le jar du serveur, pas seulement dans le plugin."
   invalid: "&eValeur &d%value% &einvalide (&a%type%&e)."
-  noPermission: "&dAether &7| &cTu n as pas acces a cette commande."
+  noPermission: "&dAether &7| &cTu n'as pas acces. Dans la console du serveur, tape &fop <ton pseudo>&c."
   onlyPlayer: "&dCette commande est reservee aux joueurs."
 pearl:
   cooldown: "&dPerle &7| &eEncore &d%seconds%s&e."
