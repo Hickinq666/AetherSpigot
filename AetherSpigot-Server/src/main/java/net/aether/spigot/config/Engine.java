@@ -24,7 +24,7 @@ public final class Engine {
     public EnchantLimits enchants = EnchantLimits.from(YamlDoc.parse("enchant-limits: {}\n"));
     public double fallModifier = 1.0D;
     public double critModifier = 1.5D;
-    public double strengthModifier = 1.3D;
+    public double strengthModifier = 0.5D;
     public boolean customDamage = true;
     public boolean protRandom = false;
     public double protectionModifier = 22.0D;
@@ -38,7 +38,7 @@ public final class Engine {
     public int chatSpamPerSecond = 8;
     public boolean chatSpamKick = false;
     public int cpsLimit = 0;
-    public boolean pingHitDetection = false;
+    public boolean pingHitDetection = true;
     public int pearlCooldownSeconds = 16;
     public boolean blockPearlsInSpawn = false;
     public double spawnRadius = 8.0D;
@@ -123,7 +123,7 @@ public final class Engine {
             engine.overrideArrow = aether.bool("knockback.overrideArrowKnockback", true);
             engine.fallModifier = aether.decimal("modifiers.fallDamageModifier", 1.0D);
             engine.critModifier = aether.decimal("modifiers.critDamageModifier", 1.5D);
-            engine.strengthModifier = aether.decimal("modifiers.strengthModifier", 1.3D);
+            engine.strengthModifier = aether.decimal("modifiers.strengthModifier", 0.5D);
             engine.customDamage = aether.bool("players.customArmorAndProtection", true);
             engine.protRandom = aether.bool("players.protRandomness", false);
             engine.protectionModifier = aether.decimal("players.protectionModifier", 22.0D);
@@ -137,7 +137,7 @@ public final class Engine {
             engine.chatSpamPerSecond = aether.integer("patches.chatSpamPerSecond", 8);
             engine.chatSpamKick = aether.bool("patches.chatSpamKick", false);
             engine.cpsLimit = aether.integer("patches.cpsLimit", 0);
-            engine.pingHitDetection = aether.bool("players.pingHitDetection", false);
+            engine.pingHitDetection = aether.bool("players.pingHitDetection", true);
             engine.pearlCooldownSeconds = aether.integer("practice.pearlCooldownSeconds", 16);
             engine.blockPearlsInSpawn = aether.bool("practice.blockPearlsInSpawn", false);
             engine.spawnRadius = aether.decimal("practice.spawnRadius", 8.0D);

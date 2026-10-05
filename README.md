@@ -109,8 +109,8 @@ Combat, dans `aether.yml` :
 | Réglage | Défaut | Effet |
 | --- | --- | --- |
 | `patches.cpsLimit` | 0 | Coups maximum par seconde. 0 : pas de limite. Au-dessus, le clic est ignoré avant le calcul du coup |
-| `players.pingHitDetection` | false | Le coup est jugé sur la position de la cible il y a le ping de l'attaquant, pas sur sa position actuelle |
-| `modifiers.strengthModifier` | 1.3 | Bonus de Force par niveau. 1.3 est le vanilla 1.8 (+130 % en Force I). 0.5 donne +50 % |
+| `players.pingHitDetection` | true | Le coup est jugé sur la position de la cible il y a le ping de l'attaquant, pas sur sa position actuelle |
+| `modifiers.strengthModifier` | 0.5 | Bonus de Force par niveau. 1.3 est le vanilla 1.8 (+130 % en Force I). 0.5 donne +50 % |
 
 Cooldown de perle : `practice.pearlCooldownSeconds` (16). Armure de teamfight : `players.armorDamageDivision` (12, plus de dégâts passent qu'avec 4). Protection sans aléatoire : `players.protRandomness: false` et `protectionModifier: 22`.
 

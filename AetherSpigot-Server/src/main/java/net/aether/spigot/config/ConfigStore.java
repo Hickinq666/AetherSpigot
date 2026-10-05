@@ -77,6 +77,27 @@ public final class ConfigStore {
             }
         }
         read("player-knockback.yml");
+        applyChosenCombat();
+    }
+
+    /**
+     * Une seule fois : active la détection selon le ping et baisse la Force à 0.5.
+     * Les changements faits ensuite dans le menu restent.
+     */
+    private void applyChosenCombat() {
+        File marker = new File(folder, ".combat-ping-force");
+        YamlDoc doc = docs.get("aether.yml");
+        if (doc == null || marker.exists()) {
+            return;
+        }
+        doc.set("players.pingHitDetection", Boolean.TRUE);
+        doc.set("modifiers.strengthModifier", Double.valueOf(0.5D));
+        writeNow("aether.yml", doc.save());
+        try {
+            marker.createNewFile();
+        } catch (IOException ex) {
+            plugin.getLogger().warning(ex.getMessage());
+        }
     }
 
     public YamlDoc doc(String name) {
