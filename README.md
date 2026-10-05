@@ -89,6 +89,21 @@ Tout est dans le dossier `aether/` du serveur, créé au premier démarrage. Les
 
 Profil de knockback global au premier boot : **HCF**. `/knockback setactive Practice` ou `Combo` change le feeling. Le `knockback.yml` de NachoSpigot ne sert que si `overrideKnockback` est coupé dans `aether.yml`, et pour les boules de neige, œufs et perles.
 
+Potions de soin, dans chaque profil de `knockback/` :
+
+| Réglage | Défaut | Effet |
+| --- | --- | --- |
+| `potionSpeed` / `potionVerticalOffset` | 0.5 / -10 | Vitesse et angle du lancer (vanilla : 0.5 / -20) |
+| `potionFast` | true | +20 % de vitesse |
+| `potionFall` | 0.05 | Gravité par tick (vanilla 0.05). Plus bas : la potion vole plus loin et plus longtemps |
+| `potionDrag` | 0.99 | Vitesse gardée à chaque tick (vanilla 0.99). Plus bas : la potion freine et retombe plus près |
+| `potionStartForward` / `potionStartHeight` | 0 / -0.1 | Point de départ : blocs devant les yeux (-0.5 à 2) et hauteur par rapport aux yeux |
+| `potionInheritMotion` | 0 | Part de ta vitesse ajoutée à la potion (0 à 1). 1 : elle suit ta course |
+| `potionDownEnabled` | false | Réglage à part quand tu regardes vers le bas |
+| `potionDownPitch` / `potionDownSpeed` / `potionDownVerticalOffset` | 70 / 0.5 / -20 | Angle à partir duquel il s'applique, vitesse et angle du lancer |
+
+`projectiles.overrideOnlyHealthPotion: false` applique ces réglages à toutes les potions. `projectiles.lagCompensatedPotions: true` active les potions compensées par le ping de NachoSpigot. Les nouveaux réglages d'une mise à jour du jar sont ajoutés tout seuls aux fichiers du dossier `aether/`, sans changer tes valeurs.
+
 Cooldown de perle : `practice.pearlCooldownSeconds` (16). Armure de teamfight : `players.armorDamageDivision` (12, plus de dégâts passent qu'avec 4). Protection sans aléatoire : `players.protRandomness: false` et `protectionModifier: 22`.
 
 ## Compiler

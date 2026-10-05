@@ -69,6 +69,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public int viewDistance; // PaperSpigot - Player view distance API
     /*private int containerUpdateDelay;*/ // PaperSpigot
     public List<EntityPotion> potions = new ArrayList<>(); // IonSpigot - Lag Compensated Potions
+    public double aetherMoveX, aetherMoveY, aetherMoveZ; // AetherSpigot - déplacement du dernier paquet
 
     @Override
     public boolean ad()

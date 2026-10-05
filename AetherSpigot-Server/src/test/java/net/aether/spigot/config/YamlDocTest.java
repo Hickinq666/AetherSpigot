@@ -25,6 +25,16 @@ class YamlDocTest {
     }
 
     @Test
+    void addMissingKeepsUserValuesAndInsertsAfterPrevious() {
+        YamlDoc user = YamlDoc.parse("potionSpeed: 0.4\npotionFast: false\nhitDelay: 18\nprojectiles:\n  arrow: 2.0\n");
+        YamlDoc defaults = YamlDoc.parse("potionSpeed: 0.5\npotionFast: true\npotionDrag: 0.99\nhitDelay: 20\nprojectiles:\n  arrow: 1.0\n  lagCompensatedPotions: false\n");
+        assertTrue(user.addMissing(defaults));
+        assertEquals("potionSpeed: 0.4\npotionFast: false\npotionDrag: 0.99\nhitDelay: 18\nprojectiles:\n  arrow: 2.0\n  lagCompensatedPotions: false\n",
+                user.save());
+        assertFalse(user.addMissing(YamlDoc.parse("potionSpeed: 0.5\n")));
+    }
+
+    @Test
     void setKeepsSiblingComment() {
         YamlDoc doc = YamlDoc.parse("enchants:\n  # limite\n  sharp: 5\n  prot: 4\n");
         doc.set("enchants.sharp", Integer.valueOf(2));

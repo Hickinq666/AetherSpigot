@@ -34,6 +34,14 @@ potionFall: 0.05
 potionSpeed: 0.55
 potionVerticalOffset: -10.0
 potionFast: true
+potionDrag: 0.99
+potionStartForward: 0.0
+potionStartHeight: -0.1
+potionInheritMotion: 0.0
+potionDownEnabled: false
+potionDownPitch: 70.0
+potionDownSpeed: 0.5
+potionDownVerticalOffset: -20.0
 hitDelay: 20
 hitDelayArrow: 20
 comboMode: false

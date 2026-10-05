@@ -225,6 +225,15 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 double d0 = this.player.locX;
                 double d1 = this.player.locY;
                 double d2 = this.player.locZ;
+                // AetherSpigot start - élan du joueur, repris par ses potions
+                if (packetplayinflying.hasPos && packetplayinflying.y != -999.0D) {
+                    this.player.aetherMoveX = Math.max(-1.0D, Math.min(1.0D, packetplayinflying.x - d0));
+                    this.player.aetherMoveY = Math.max(-1.0D, Math.min(1.0D, packetplayinflying.y - d1));
+                    this.player.aetherMoveZ = Math.max(-1.0D, Math.min(1.0D, packetplayinflying.z - d2));
+                } else {
+                    this.player.aetherMoveX = this.player.aetherMoveY = this.player.aetherMoveZ = 0.0D;
+                }
+                // AetherSpigot end
                 double d3 = 0.0D;
                 double d4 = packetplayinflying.a() - this.o;
                 double d5 = packetplayinflying.b() - this.p;

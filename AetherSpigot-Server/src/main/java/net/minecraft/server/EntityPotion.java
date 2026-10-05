@@ -41,9 +41,18 @@ public class EntityPotion extends EntityProjectile {
         this.item = itemstack;
     }
 
+    // AetherSpigot start - gravité et résistance de l'air du profil du lanceur
+    public float aetherGravity = -1.0F;
+    public float aetherDrag = -1.0F;
+
     protected float m() {
-        return 0.05F;
+        return this.aetherGravity >= 0.0F ? this.aetherGravity : 0.05F;
     }
+
+    protected float airDrag() {
+        return this.aetherDrag >= 0.0F ? this.aetherDrag : super.airDrag();
+    }
+    // AetherSpigot end
 
     protected float j() {
         return 0.5F;

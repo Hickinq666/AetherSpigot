@@ -198,15 +198,65 @@ public final class YamlDoc {
         return node.inlineComment;
     }
 
+    /**
+     * Ajoute les clés de {@code defaults} absentes de ce document, juste après la clé qui les précède
+     * dans {@code defaults}. Les valeurs déjà présentes ne changent pas. Retourne true si une clé a été ajoutée.
+     */
+    public boolean addMissing(YamlDoc defaults) {
+        boolean changed = merge(root, defaults.root);
+        if (changed) {
+            mutated = true;
+        }
+        return changed;
+    }
+
+    private static boolean merge(Node target, Node source) {
+        if (target.kind != Kind.MAP || source.kind != Kind.MAP) {
+            return false;
+        }
+        boolean changed = false;
+        for (int i = 0; i < source.children.size(); i++) {
+            Node child = source.children.get(i);
+            if (child.key == null) {
+                continue;
+            }
+            Node existing = target.child(child.key);
+            if (existing != null) {
+                changed |= merge(existing, child);
+                continue;
+            }
+            int at = target.children.size();
+            for (int j = i - 1; j >= 0; j--) {
+                Node previous = source.children.get(j).key == null ? null : target.child(source.children.get(j).key);
+                if (previous != null) {
+                    at = target.children.indexOf(previous) + 1;
+                    break;
+                }
+            }
+            reindent(child, target.indent + 2 - child.indent);
+            target.children.add(at, child);
+            changed = true;
+        }
+        return changed;
+    }
+
+    private static void reindent(Node node, int delta) {
+        node.indent += delta;
+        for (int i = 0; i < node.children.size(); i++) {
+            reindent(node.children.get(i), delta);
+        }
+    }
+
     public String save() {
         if (!mutated) {
             return original;
         }
         StringBuilder out = new StringBuilder();
         writeChildren(root, out);
-        if (out.length() == 0 || out.charAt(out.length() - 1) != '\n') {
-            out.append('\n');
+        while (out.length() > 0 && out.charAt(out.length() - 1) == '\n') {
+            out.setLength(out.length() - 1);
         }
+        out.append('\n');
         return out.toString();
     }
 

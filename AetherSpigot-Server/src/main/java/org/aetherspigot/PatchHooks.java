@@ -94,15 +94,40 @@ public final class PatchHooks {
         if (core.engine().overrideOnlyHealth && !health) {
             return;
         }
-        KnockbackProfile profile = core.profileFor(((EntityPlayer) shooter).getBukkitEntity());
-        float speed = (float) Math.max(0.05D, profile.potionSpeed * (health && profile.potionFast ? 1.2D : 1.0D));
+        EntityPlayer player = (EntityPlayer) shooter;
+        KnockbackProfile profile = core.profileFor(player.getBukkitEntity());
+        boolean down = profile.potionDownEnabled && shooter.pitch >= profile.potionDownPitch;
+        double baseSpeed = down ? profile.potionDownSpeed : profile.potionSpeed;
+        double offset = down ? profile.potionDownVerticalOffset : profile.potionVerticalOffset;
+        float speed = (float) Math.max(0.05D, baseSpeed * (health && profile.potionFast ? 1.2D : 1.0D));
         float yaw = shooter.yaw / 180.0F * 3.1415927F;
         float pitch = shooter.pitch / 180.0F * 3.1415927F;
-        float lifted = (float) ((shooter.pitch + profile.potionVerticalOffset) / 180.0D * Math.PI);
-        double x = -MathHelper.sin(yaw) * MathHelper.cos(pitch);
-        double z = MathHelper.cos(yaw) * MathHelper.cos(pitch);
+        float lifted = (float) ((shooter.pitch + offset) / 180.0D * Math.PI);
+
+        double lookX = -MathHelper.sin(yaw) * MathHelper.cos(pitch);
+        double lookY = -MathHelper.sin(pitch);
+        double lookZ = MathHelper.cos(yaw) * MathHelper.cos(pitch);
+        double forward = Math.max(-0.5D, Math.min(2.0D, profile.potionStartForward));
+        potion.setPosition(
+                shooter.locX - MathHelper.cos(yaw) * 0.16F + lookX * forward,
+                shooter.locY + shooter.getHeadHeight() + profile.potionStartHeight + lookY * forward,
+                shooter.locZ - MathHelper.sin(yaw) * 0.16F + lookZ * forward);
+
+        double x = lookX;
+        double z = lookZ;
         double y = -MathHelper.sin(lifted);
         potion.shoot(x, y, z, speed, inaccuracy(potion, shooter, 1.0F));
+
+        double inherit = Math.max(0.0D, Math.min(1.0D, profile.potionInheritMotion));
+        if (inherit > 0.0D) {
+            potion.motX += player.aetherMoveX * inherit;
+            potion.motZ += player.aetherMoveZ * inherit;
+            if (!player.onGround) {
+                potion.motY += player.aetherMoveY * inherit;
+            }
+        }
+        potion.aetherGravity = (float) Math.max(0.0D, profile.potionFall);
+        potion.aetherDrag = (float) Math.max(0.0D, Math.min(1.0D, profile.potionDrag));
     }
 
     /** Clic droit d'un joueur sur un bloc, avant que le bloc ou l'objet réagisse. true : clic consommé. */

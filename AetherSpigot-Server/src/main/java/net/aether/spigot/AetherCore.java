@@ -122,7 +122,7 @@ public final class AetherCore extends PluginBase {
     public void onEnable() {
         store = new ConfigStore(this);
         store.load();
-        engine = Engine.load(store);
+        engine(Engine.load(store));
         messages = new MessageService(store);
         via = new ViaHook();
         menus = new MenuService(this);
@@ -337,6 +337,11 @@ public final class AetherCore extends PluginBase {
         return engine;
     }
 
+    private void engine(Engine loaded) {
+        engine = loaded;
+        me.elier.nachospigot.config.NachoConfig.lagCompensatedPotions = loaded.lagCompensatedPotions;
+    }
+
     public ConfigStore store() {
         return store;
     }
@@ -375,14 +380,14 @@ public final class AetherCore extends PluginBase {
 
     public void reloadAll() {
         store.load();
-        engine = Engine.load(store);
+        engine(Engine.load(store));
         loadPlayerProfiles();
         applyWorlds();
     }
 
     public void update(String file, String path, Object value) {
         store.set(file, path, value);
-        engine = Engine.load(store);
+        engine(Engine.load(store));
         applyWorlds();
     }
 

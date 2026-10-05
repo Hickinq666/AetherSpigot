@@ -211,7 +211,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
-        float f2 = 0.99F;
+        float f2 = this.airDrag(); // AetherSpigot
         float f3 = this.m();
 
         if (this.V()) {
@@ -233,6 +233,11 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
     protected float m() {
         return 0.03F;
+    }
+
+    // AetherSpigot - résistance de l'air par tick, hors de l'eau
+    protected float airDrag() {
+        return 0.99F;
     }
 
     protected abstract void a(MovingObjectPosition movingobjectposition);

@@ -53,13 +53,18 @@ public final class ConfigStore {
         for (String resource : RESOURCES) {
             ensure(resource);
             read(resource);
+            if (!"menus.yml".equals(resource)) {
+                complete(resource, resource);
+            }
         }
         File knockback = new File(folder, "knockback");
         File[] extra = knockback.listFiles();
         if (extra != null) {
             for (File file : extra) {
-                if (file.getName().endsWith(".yml")) {
-                    read("knockback/" + file.getName());
+                String name = "knockback/" + file.getName();
+                if (file.getName().endsWith(".yml") && !docs.containsKey(name)) {
+                    read(name);
+                    complete(name, "knockback/Default.yml");
                 }
             }
         }
@@ -152,6 +157,41 @@ public final class ConfigStore {
             parent.mkdirs();
         }
         plugin.saveResource(resource, false);
+    }
+
+    /** Ajoute au fichier du serveur les réglages apparus dans une nouvelle version du jar. */
+    private void complete(String file, String bundled) {
+        YamlDoc doc = docs.get(file);
+        if (doc == null) {
+            return;
+        }
+        java.io.InputStream in = plugin.getResource(bundled);
+        if (in == null) {
+            return;
+        }
+        try {
+            YamlDoc defaults = YamlDoc.parse(new String(readAll(in), StandardCharsets.UTF_8));
+            if (doc.addMissing(defaults)) {
+                writeNow(file, doc.save());
+            }
+        } catch (IOException ex) {
+            plugin.getLogger().warning("Lecture " + bundled + " : " + ex.getMessage());
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    private static byte[] readAll(java.io.InputStream in) throws IOException {
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        byte[] buffer = new byte[8192];
+        int n;
+        while ((n = in.read(buffer)) > 0) {
+            out.write(buffer, 0, n);
+        }
+        return out.toByteArray();
     }
 
     private void read(String resource) {

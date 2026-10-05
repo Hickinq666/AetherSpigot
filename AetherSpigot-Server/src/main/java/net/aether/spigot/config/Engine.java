@@ -73,6 +73,7 @@ public final class Engine {
     public double eggRandomness = 1.0D;
     public double pearlRandomness = 1.0D;
     public double potionRandomness = 1.0D;
+    public boolean lagCompensatedPotions = false;
     public boolean fillerEnabled = true;
     public String fillerType = "STAINED_GLASS_PANE";
     public int fillerData = 7;
@@ -186,6 +187,7 @@ public final class Engine {
             engine.pearlRandomness = aether.decimal("projectiles.pearlTrajectoryRandomness", 1.0D);
             engine.potionRandomness = aether.decimal("projectiles.potionTrajectoryRandomness", 1.0D);
             engine.overrideOnlyHealth = aether.bool("projectiles.overrideOnlyHealthPotion", true);
+            engine.lagCompensatedPotions = aether.bool("projectiles.lagCompensatedPotions", false);
         }
         if (pearls != null) {
             engine.pearls = PearlMath.Rules.from(pearls);

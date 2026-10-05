@@ -64,6 +64,7 @@ projectiles:
   pearlTrajectoryRandomness: 1.0
   potionTrajectoryRandomness: 1.0
   overrideOnlyHealthPotion: true
+  lagCompensatedPotions: false
 sounds:
   itemFizzSounds: true
   fluidFizzSounds: true
