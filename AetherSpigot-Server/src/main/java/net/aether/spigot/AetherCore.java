@@ -340,6 +340,20 @@ public final class AetherCore extends PluginBase {
     private void engine(Engine loaded) {
         engine = loaded;
         me.elier.nachospigot.config.NachoConfig.lagCompensatedPotions = loaded.lagCompensatedPotions;
+        me.elier.nachospigot.config.NachoConfig.enableImprovedHitReg = loaded.pingHitDetection;
+        com.destroystokyo.paper.PaperConfig.strengthEffectModifier = loaded.strengthModifier;
+        refreshStrength();
+    }
+
+    /** La Force déjà active relit le multiplicateur, sans attendre une nouvelle potion. */
+    private static void refreshStrength() {
+        for (Player player : org.bukkit.Bukkit.getOnlinePlayers()) {
+            net.minecraft.server.EntityPlayer handle = ((org.bukkit.craftbukkit.entity.CraftPlayer) player).getHandle();
+            net.minecraft.server.MobEffect effect = handle.getEffect(net.minecraft.server.MobEffectList.INCREASE_DAMAGE);
+            if (effect != null) {
+                net.minecraft.server.MobEffectList.INCREASE_DAMAGE.b(handle, handle.getAttributeMap(), effect.getAmplifier());
+            }
+        }
     }
 
     public ConfigStore store() {

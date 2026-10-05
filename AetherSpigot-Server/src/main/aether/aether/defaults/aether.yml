@@ -82,6 +82,7 @@ modifiers:
   brewingModifier: 1.0
   fallDamageModifier: 1.0
   critDamageModifier: 1.5
+  strengthModifier: 1.3
 events:
   firePlayerMoveEvent: true
   fireBlockPhysicsEvent: true
@@ -137,6 +138,7 @@ players:
   customArmorAndProtection: true
   optimizePlayerPrinter: false
   autoRespawnPlayer: true
+  pingHitDetection: false
   potionLaunchOnClick:
     - HOPPER
     - CHEST
@@ -169,6 +171,7 @@ patches:
   obfuscateEntityEquipment: false
   chatSpamPerSecond: 8
   chatSpamKick: false
+  cpsLimit: 0
 menus:
   fillerEnabled: true
   fillerType: STAINED_GLASS_PANE

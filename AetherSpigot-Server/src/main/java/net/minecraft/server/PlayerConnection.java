@@ -1544,6 +1544,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         return;
                     }
 
+                    if (!org.aetherspigot.PatchHooks.attackAllowed(this.player)) {
+                        return; // AetherSpigot - au-dessus de la limite de CPS, le coup n'est pas calculé
+                    }
                     this.player.attack(entity);
                     // wuangg start - fix sword blocking desync
                     if (this.player.isBlocking()) {

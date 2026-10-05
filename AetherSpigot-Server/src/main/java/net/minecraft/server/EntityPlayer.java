@@ -70,6 +70,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     /*private int containerUpdateDelay;*/ // PaperSpigot
     public List<EntityPotion> potions = new ArrayList<>(); // IonSpigot - Lag Compensated Potions
     public double aetherMoveX, aetherMoveY, aetherMoveZ; // AetherSpigot - déplacement du dernier paquet
+    public long aetherCpsAt; // AetherSpigot
+    public int aetherCpsCount; // AetherSpigot
 
     @Override
     public boolean ad()

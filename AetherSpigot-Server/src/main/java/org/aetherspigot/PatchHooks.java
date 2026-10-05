@@ -190,6 +190,29 @@ public final class PatchHooks {
         return edge > core.engine().phaseLeniency;
     }
 
+    /**
+     * Paquet d'attaque, avant EntityHuman.attack. 0 désactive la limite.
+     * Les clics au-dessus du seuil dans la seconde en cours ne lancent pas le coup.
+     */
+    public static boolean attackAllowed(EntityPlayer player) {
+        AetherCore core = core();
+        if (core == null) {
+            return true;
+        }
+        int cap = core.engine().cpsLimit;
+        if (cap <= 0) {
+            return true;
+        }
+        long now = System.currentTimeMillis();
+        if (player.aetherCpsAt == 0L || now - player.aetherCpsAt >= 1000L) {
+            player.aetherCpsAt = now;
+            player.aetherCpsCount = 1;
+            return true;
+        }
+        player.aetherCpsCount++;
+        return player.aetherCpsCount <= cap;
+    }
+
     /** Thread du chat. */
     public static int chat(EntityPlayer player) {
         AetherCore core = core();
