@@ -125,5 +125,7 @@ pearl:
   disabled: "&cLes perles sont bloquees ici."
 chat:
   spam: "&cDoucement. Tu envoies trop de messages."
+combat:
+  cps: "&cYou are clicking over &f%cps% &cCPS. Click below this to make sure your hits dont cancel."
 durability:
   checker: "&eDurabilite de &d%block%&e: &d%durability%"

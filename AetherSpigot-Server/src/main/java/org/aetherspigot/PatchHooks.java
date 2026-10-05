@@ -33,6 +33,9 @@ import net.minecraft.server.MathHelper;
 import net.minecraft.server.PacketPlayInClientCommand;
 import net.minecraft.server.World;
 import org.bukkit.Material;
+
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
@@ -207,10 +210,20 @@ public final class PatchHooks {
         if (player.aetherCpsAt == 0L || now - player.aetherCpsAt >= 1000L) {
             player.aetherCpsAt = now;
             player.aetherCpsCount = 1;
+            player.aetherCpsWarned = false;
             return true;
         }
         player.aetherCpsCount++;
-        return player.aetherCpsCount <= cap;
+        if (player.aetherCpsCount <= cap) {
+            return true;
+        }
+        if (!player.aetherCpsWarned) {
+            player.aetherCpsWarned = true;
+            Map<String, String> values = new HashMap<String, String>();
+            values.put("cps", Integer.toString(cap));
+            core.messages().send(player.getBukkitEntity(), "combat.cps", values);
+        }
+        return false;
     }
 
     /** Thread du chat. */

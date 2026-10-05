@@ -108,7 +108,7 @@ Combat, dans `aether.yml` :
 
 | Réglage | Défaut | Effet |
 | --- | --- | --- |
-| `patches.cpsLimit` | 0 | Coups maximum par seconde. 0 : pas de limite. Au-dessus, le clic est ignoré avant le calcul du coup |
+| `patches.cpsLimit` | 0 | Coups maximum par seconde. 0 : pas de limite. Au-dessus, le clic est ignoré avant le calcul du coup, et le joueur reçoit le message `combat.cps` une fois par seconde |
 | `players.pingHitDetection` | true | Le coup est jugé sur la position de la cible il y a le ping de l'attaquant, pas sur sa position actuelle |
 | `modifiers.strengthModifier` | 0.5 | Bonus de Force par niveau. 1.3 est le vanilla 1.8 (+130 % en Force I). 0.5 donne +50 % |
 

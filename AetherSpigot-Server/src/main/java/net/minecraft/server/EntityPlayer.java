@@ -72,6 +72,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public double aetherMoveX, aetherMoveY, aetherMoveZ; // AetherSpigot - déplacement du dernier paquet
     public long aetherCpsAt; // AetherSpigot
     public int aetherCpsCount; // AetherSpigot
+    public boolean aetherCpsWarned; // AetherSpigot
 
     @Override
     public boolean ad()
