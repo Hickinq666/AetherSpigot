@@ -73,6 +73,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public long aetherCpsAt; // AetherSpigot
     public int aetherCpsCount; // AetherSpigot
     public boolean aetherCpsWarned; // AetherSpigot
+    public long aetherCpsCancelUntil; // AetherSpigot - coups ignores jusqu'a cet instant
 
     @Override
     public boolean ad()

@@ -194,8 +194,9 @@ public final class PatchHooks {
     }
 
     /**
-     * Paquet d'attaque, avant EntityHuman.attack. 0 désactive la limite.
-     * Les clics au-dessus du seuil dans la seconde en cours ne lancent pas le coup.
+     * Paquet d'attaque, avant EntityHuman.attack. cpsLimit a 0 desactive la limite.
+     * Le premier clic au-dessus du seuil dans la seconde en cours envoie le message
+     * et ignore les coups pendant cpsCancelSeconds (0 : seulement jusqu'a la fin de cette seconde).
      */
     public static boolean attackAllowed(EntityPlayer player) {
         AetherCore core = core();
@@ -207,6 +208,16 @@ public final class PatchHooks {
             return true;
         }
         long now = System.currentTimeMillis();
+        if (player.aetherCpsCancelUntil > now) {
+            return false;
+        }
+        if (player.aetherCpsCancelUntil > 0L) {
+            player.aetherCpsCancelUntil = 0L;
+            player.aetherCpsAt = now;
+            player.aetherCpsCount = 1;
+            player.aetherCpsWarned = false;
+            return true;
+        }
         if (player.aetherCpsAt == 0L || now - player.aetherCpsAt >= 1000L) {
             player.aetherCpsAt = now;
             player.aetherCpsCount = 1;
@@ -222,6 +233,10 @@ public final class PatchHooks {
             Map<String, String> values = new HashMap<String, String>();
             values.put("cps", Integer.toString(cap));
             core.messages().send(player.getBukkitEntity(), "combat.cps", values);
+        }
+        int seconds = core.engine().cpsCancelSeconds;
+        if (seconds > 0) {
+            player.aetherCpsCancelUntil = now + seconds * 1000L;
         }
         return false;
     }

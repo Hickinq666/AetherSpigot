@@ -172,6 +172,7 @@ patches:
   chatSpamPerSecond: 8
   chatSpamKick: false
   cpsLimit: 0
+  cpsCancelSeconds: 2 # secondes ou les coups sont annules
 menus:
   fillerEnabled: true
   fillerType: STAINED_GLASS_PANE

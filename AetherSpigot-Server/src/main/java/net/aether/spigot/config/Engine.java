@@ -38,6 +38,7 @@ public final class Engine {
     public int chatSpamPerSecond = 8;
     public boolean chatSpamKick = false;
     public int cpsLimit = 0;
+    public int cpsCancelSeconds = 2;
     public boolean pingHitDetection = true;
     public int pearlCooldownSeconds = 16;
     public boolean blockPearlsInSpawn = false;
@@ -137,6 +138,7 @@ public final class Engine {
             engine.chatSpamPerSecond = aether.integer("patches.chatSpamPerSecond", 8);
             engine.chatSpamKick = aether.bool("patches.chatSpamKick", false);
             engine.cpsLimit = aether.integer("patches.cpsLimit", 0);
+            engine.cpsCancelSeconds = Math.max(0, aether.integer("patches.cpsCancelSeconds", 2));
             engine.pingHitDetection = aether.bool("players.pingHitDetection", true);
             engine.pearlCooldownSeconds = aether.integer("practice.pearlCooldownSeconds", 16);
             engine.blockPearlsInSpawn = aether.bool("practice.blockPearlsInSpawn", false);
