@@ -44,6 +44,7 @@ public final class Engine {
     public boolean blockPearlsInSpawn = false;
     public double spawnRadius = 8.0D;
     public boolean hungerLock = false;
+    public boolean removeEmptyBottle = false;
     public float hungerWalk = 0.2F;
     public float hungerSprint = 0.8F;
     public float hungerCombat = 0.3F;
@@ -148,6 +149,7 @@ public final class Engine {
             engine.blockPearlsInSpawn = aether.bool("practice.blockPearlsInSpawn", false);
             engine.spawnRadius = aether.decimal("practice.spawnRadius", 8.0D);
             engine.hungerLock = aether.bool("practice.hungerLock", false);
+            engine.removeEmptyBottle = aether.bool("practice.removeEmptyBottle", false);
             engine.hungerWalk = hungerRate(aether, "practice.hungerWalkExhaustion", 0.2D);
             engine.hungerSprint = hungerRate(aether, "practice.hungerSprintExhaustion", 0.8D);
             engine.hungerCombat = hungerRate(aether, "practice.hungerCombatExhaustion", 0.3D);

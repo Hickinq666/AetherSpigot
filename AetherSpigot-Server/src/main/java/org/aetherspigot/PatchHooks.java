@@ -261,6 +261,12 @@ public final class PatchHooks {
         return (float) (amount * core.engine().regenMultiplier);
     }
 
+    /** Potion bue : ne pas rendre la fiole vide. Les potions jetables n'en donnent déjà pas. */
+    public static boolean removeEmptyBottle(EntityHuman human) {
+        AetherCore core = core();
+        return core != null && core.engine().removeEmptyBottle && human instanceof EntityPlayer;
+    }
+
     /** La faim ne baisse plus. */
     public static boolean hungerLocked(EntityHuman human) {
         AetherCore core = core();
