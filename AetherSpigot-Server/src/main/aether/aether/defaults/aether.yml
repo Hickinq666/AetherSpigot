@@ -235,3 +235,7 @@ practice:
   blockPearlsInSpawn: false
   spawnRadius: 8.0
   hungerLock: false
+  hungerWalkExhaustion: 0.2 # faim en marchant, plus haut = plus vite
+  hungerSprintExhaustion: 0.8 # faim en sprint
+  hungerCombatExhaustion: 0.3 # faim par coup donne
+  hungerRegenExhaustion: 3.0 # faim quand la vie remonte

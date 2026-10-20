@@ -455,6 +455,11 @@ public final class AetherCore extends PluginBase {
                 world.setStorm(false);
                 world.setThundering(false);
             }
+            net.minecraft.server.WorldServer handle = ((org.bukkit.craftbukkit.CraftWorld) world).getHandle();
+            handle.spigotConfig.walkExhaustion = current.hungerWalk;
+            handle.spigotConfig.sprintExhaustion = current.hungerSprint;
+            handle.spigotConfig.combatExhaustion = current.hungerCombat;
+            handle.spigotConfig.regenExhaustion = current.hungerRegen;
         }
     }
 

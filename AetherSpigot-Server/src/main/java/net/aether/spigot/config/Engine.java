@@ -44,6 +44,10 @@ public final class Engine {
     public boolean blockPearlsInSpawn = false;
     public double spawnRadius = 8.0D;
     public boolean hungerLock = false;
+    public float hungerWalk = 0.2F;
+    public float hungerSprint = 0.8F;
+    public float hungerCombat = 0.3F;
+    public float hungerRegen = 3.0F;
     public boolean autoRespawn = true;
     public double phaseLeniency = 0.0625D;
     public boolean phaseChests = true;
@@ -144,6 +148,10 @@ public final class Engine {
             engine.blockPearlsInSpawn = aether.bool("practice.blockPearlsInSpawn", false);
             engine.spawnRadius = aether.decimal("practice.spawnRadius", 8.0D);
             engine.hungerLock = aether.bool("practice.hungerLock", false);
+            engine.hungerWalk = hungerRate(aether, "practice.hungerWalkExhaustion", 0.2D);
+            engine.hungerSprint = hungerRate(aether, "practice.hungerSprintExhaustion", 0.8D);
+            engine.hungerCombat = hungerRate(aether, "practice.hungerCombatExhaustion", 0.3D);
+            engine.hungerRegen = hungerRate(aether, "practice.hungerRegenExhaustion", 3.0D);
             engine.autoRespawn = aether.bool("players.autoRespawnPlayer", true);
             engine.phaseLeniency = aether.decimal("players.playerPhaseLeniency", 0.0625D);
             engine.phaseChests = aether.bool("players.playerPhaseChestsAndAnvils", true);
@@ -252,6 +260,14 @@ public final class Engine {
             }
         }
         return map;
+    }
+
+    private static float hungerRate(YamlDoc aether, String path, double fallback) {
+        double value = aether.decimal(path, fallback);
+        if (value < 0.0D) {
+            value = 0.0D;
+        }
+        return (float) value;
     }
 
     private static List<String> upper(List<String> values) {

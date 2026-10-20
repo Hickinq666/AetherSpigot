@@ -115,6 +115,8 @@ Combat, dans `aether.yml` :
 
 Cooldown de perle : `practice.pearlCooldownSeconds` (16). Armure de teamfight : `players.armorDamageDivision` (12, plus de dégâts passent qu'avec 4). Protection sans aléatoire : `players.protRandomness: false` et `protectionModifier: 22`.
 
+Faim, dans `/aether` → Mécaniques → `practice`. `hungerLock: true` la bloque. La vitesse se règle à part, plus haut = la faim tombe plus vite : `hungerWalkExhaustion` (0.2), `hungerSprintExhaustion` (0.8), `hungerCombatExhaustion` (0.3), `hungerRegenExhaustion` (3, faim dépensée quand la vie remonte).
+
 ## Compiler
 
 Java 17+ et Maven :
